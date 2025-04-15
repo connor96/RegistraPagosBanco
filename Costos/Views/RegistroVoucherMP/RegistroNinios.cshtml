@@ -1,0 +1,254 @@
+﻿@{
+    ViewData["Title"] = "RegistroCiclo";
+    @model List<CEntidades.EN_PHoraria>;
+
+    CEntidades.EN_PHoraria _phoraria = new CEntidades.EN_PHoraria();
+    _phoraria = ViewBag.phoraria;
+
+    CEntidades.EN_Curso detalle_Curso = new CEntidades.EN_Curso();
+    detalle_Curso = ViewBag.detalles;
+
+    var sessionName = new Byte[20];
+    bool estado = Context.Session.TryGetValue("tipoAlumno", out sessionName);
+
+
+    var codCursosiguiente = new Byte[20];
+    bool estado2 = Context.Session.TryGetValue("codCurso", out codCursosiguiente);
+
+    var estadoninios = new Byte[20];
+    bool estado3 = Context.Session.TryGetValue("estadoNinios", out estadoninios);
+
+    string result = "";
+    if (estado)
+    {
+        result = System.Text.Encoding.UTF8.GetString(sessionName);
+
+    }
+
+    string result2 = "";
+    if (estado2)
+    {
+        result2 = System.Text.Encoding.UTF8.GetString(codCursosiguiente);
+
+    }
+
+    string result3 = "";
+    if (estado3)
+    {
+        result3 = System.Text.Encoding.UTF8.GetString(estadoninios);
+
+    }
+
+    bool activado = true;
+
+    List<CEntidades.EN_Curso> cursosmatriculados = new List<CEntidades.EN_Curso>();
+
+    cursosmatriculados = ViewBag.ciclomat;
+
+    string docenteaux = "";
+
+    if (cursosmatriculados.Count() != 0)
+    {
+        docenteaux = cursosmatriculados[0].Docente;
+    }
+}
+
+@section Styles{
+
+    @if (result == "NNN")
+    {
+        <link href="~/css/vouchersNinios.css" rel="stylesheet" />
+        <link href="~/css/cavernicoas.css" rel="stylesheet" />
+    }
+    else
+    {
+        <link href="~/css/vouchersmain.css" rel="stylesheet" />
+      
+    }
+
+}
+
+
+<div class="card col-10 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+
+        @if (docenteaux != "")
+        {
+
+            <div class="row">
+                @if (cursosmatriculados.Count() == 1)
+                {
+                    <div class="col-12 title-horarios">
+                        <h3 class="titulo">Usted ya ha registrado su matrícula en el siguiente horario para este periodo de Abril</h3>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12 title-horarios">
+                        <h3 class="titulo">Usted ya ha registrado su matrícula en los siguientes horarios para este periodo de Abril</h3>
+                    </div>
+                }
+
+                @foreach (var item in cursosmatriculados)
+                {
+
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <i class="fa fa-check" aria-hidden="true"></i> Frecuencia:
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        @item.ModalidadEsp
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <i class="fa fa-check" aria-hidden="true"></i> Horario:
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        @item.Horario
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <i class="fa fa-check" aria-hidden="true"></i> Curso:
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        @item.DesCurso
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <i class="fa fa-check" aria-hidden="true"></i> Docente:
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        @item.Docente
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        @item.aula
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <i class="fa fa-check" aria-hidden="true"></i> Enlace:
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <a href="@item.Enlace" target="_blank">@item.Enlace</a>
+
+                    </div>
+
+                    <br />
+
+                }
+
+            </div>
+
+        }
+        else
+        {
+
+            @if (activado)
+            {
+                <div class="row">
+                    <div class="col-12 title-horarios">
+                        <h3 class="titulo">Registro de Pagos Abril - Paso 1 de 2</h3>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card card-title">
+                                    <div class="card-body">
+                                        <h3 class="title-curso-sugerido">Nivel a Matricular =>  @detalle_Curso.CodNivel:@detalle_Curso.DesNivelCurso </h3>
+                                        <h5 class="title-curso-sugerido">
+                                            <div class="left">
+                                                Curso a matricular => @detalle_Curso.CodCurso
+                                            </div>
+                                            <div class="middle">
+                                            </div>
+
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col col-md-6 col-sm-6 col-12">
+                                <label for="exampleFormControlSelect1" class="seleccionadores"><div class="numeracion">1</div>Seleccione la Sede</label>
+                                <select class="form-control" id="ddlsedes">
+                                    <option value="0" disabled selected>Seleccione una opción</option>
+                                    @foreach (var item in Model)
+                                    {
+                                        <option value="@item.idsede">@item.sede</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col col-md-6 col-sm-6 col-12">
+                                <label for="exampleFormControlSelect1" class="seleccionadores"><div class="numeracion">2</div> Seleccione el Nivel</label>
+                                <select class="form-control" id="ddlniveles">
+                                    <option value="0" disabled selected>Seleccione una opción</option>
+                                </select>
+                            </div>
+                            <div class="col col-md-6 col-sm-6 col-12">
+                                <label for="exampleFormControlSelect1" class="seleccionadores"><div class="numeracion">3</div> Seleccione la Frecuencia</label>
+                                <select class="form-control" id="ddlfrecuencia">
+                                    <option value="0" disabled selected>Seleccione una opción</option>
+                                </select>
+                            </div>
+                            <div class="col col-md-6 col-sm-6 col-12">
+                                <label for="exampleFormControlSelect1" class="seleccionadores"><div class="numeracion">4</div> Seleccione el Curso</label>
+                                <select class="form-control" id="ddlcursos">
+                                    <option value="0" disabled selected>Seleccione una opción</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 btnbuscar">
+                                <button type="button" class="btn btn-outline-primary grande" onclick="obtenerhorarios()">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                    Buscar
+                                </button>
+                            </div>
+
+                            <div class="col-12 datos">
+
+                                <div id="tablaalumnos">
+                                    <div class="loading" id="loading">
+                                        <div class="spinner-grow text-primary"></div>
+                                        <div class="spinner-grow text-secondary"></div>
+                                        <div class="spinner-grow text-danger"></div>
+                                        <div class="spinner-grow text-warning"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-12 title-horarios">
+                        <h3 class="titulo">La matrícula no se encuentra habilitada por el momento, inténtelo nuevamente mas tarde por favor</h3>
+                    </div>
+                </div>
+            }
+
+        }
+
+
+
+    </div>
+
+
+</div>
+
+
+@section Scripts{
+
+    <script>
+        function _obtenerurl() {
+            var url = "@Url.Action("ListarFrecuenciaNinios", "RegistroVoucherMP")";
+            return url;
+        }
+
+    </script>
+    <script>
+        function _cabecera() {
+            return "@Url.Content("~")";
+        };
+    </script>
+
+    <script src="~/js/vouchersNinios2.js"></script>
+
+   
+}

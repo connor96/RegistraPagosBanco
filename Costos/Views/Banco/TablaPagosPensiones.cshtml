@@ -1,0 +1,166 @@
+﻿@using CEntidades;
+@{
+    ViewData["Title"] = "TablaPagosPensiones";
+    int contador = 0;
+    List<EN_BancoTablaPensiones> _listaPensiones = ViewBag.listaTablaPensiones;
+    decimal suma = 0;
+    EN_Voucher _Voucher = ViewBag.datosAlumno;
+}
+
+@section Styles {
+
+    <link href="~/css/voucherMP.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/css/gijgo.min.css" rel="stylesheet" />
+}
+
+<div class="card col-xl-8 col-lg-8 col-md-10 col-sm-10 col-10 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+        <div class="row">
+            <div class="col-12 title-horarios">
+                <h3>Registro de Pagos Abril - Paso 2 de 2 </h3>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+                <div class="form-group">
+                    <div id="tablemontos">
+                        <div class="table-responsive">
+                            <table class="table" id="mtable">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Concepto</th>
+                                        <th scope="col">Monto</th>
+                                    </tr>
+                                    @foreach (var item in _listaPensiones)
+                                    {
+                                        contador = contador + 1;
+                                        <tr>
+                                            <td scope="row">@contador</td>
+                                            <td>@item.descripcion</td>
+                                            <td>s/@item.monto</td>
+                                        </tr>
+                                        suma = suma + @item.monto;
+                                    }
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                        <div class="totalcosto">
+                            <h5>El total es: <span class="badge badge-danger">s/@suma</span></h5>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <br />
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+
+                <h5 class="mt-3">
+                    Actualice sus datos
+                </h5>
+
+                <div class="form-group row mt-3">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Email:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        @if (_Voucher.Email != "0")
+                        {
+                            <input type="email" class="form-control" id="correo" placeholder="Escriba un correo" value="@_Voucher.Email">
+                            <div class="anotacion">Recuerda que puedes cambiar tu correo electrónico</div>
+                        }
+                        else
+                        {
+                            <input type="email" class="form-control" id="correo" placeholder="Escriba un correo">
+                            <div class="anotacion">Recuerda que puedes cambiar tu correo electrónico</div>
+                        }
+
+                    </div>
+                </div>
+               
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Celular:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        @if (_Voucher.Celular != "0")
+                        {
+                            <input type="text" class="form-control" id="numerocelular" placeholder="Escriba un Celular" maxlength="10" onkeypress="return validaNumericosoperacion(event)" value="@_Voucher.Celular">
+                            <div class="anotacion">Recuerda que puedes cambiar tu número de celular</div>
+                        }
+                        else
+                        {
+                            <input type="text" class="form-control" id="numerocelular" placeholder="Escriba un Celular" maxlength="10" onkeypress="return validaNumericosoperacion(event)" required>
+                            <div class="anotacion">Recuerda que puedes cambiar tu número de celular</div>
+                        }
+
+
+                    </div>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <button type="button" class="botones btn btn-outline-primary" onclick="registrarmatricula()">
+                                Registrar <i class="fa fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        function validaNumericosoperacion(event) {
+            $("#" + event.explicitOriginalTarget.id).removeClass("is-invalid");
+            $("#" +event.explicitOriginalTarget.id).addClass("is-valid");
+
+            if (event.charCode >= 48 && event.charCode <= 57) {
+                return true;
+            }
+            return false;
+        }
+
+        function registrarmatricula(){
+            var email = $("#correo").val();
+            var celular = $("#numerocelular").val();
+        
+                
+            console.log(email);
+            console.log(celular);
+            if(email != "" || celular != ""){
+
+                $.ajax({
+                url:  '@Url.Action("registrarTransaccion", "Banco")',
+                type: "POST",
+                data: { correo: email,telefono:celular},
+                success: function (resultado) {
+
+                        swal({
+                            title: "Éxito",
+                            text: "Se ha registrado su matricula correctamente",
+                            type: "success",
+                            showCancelButton: false,
+                            confirmButtonColor: '#004f9e',
+                            //cancelButtonColor: '#d33',
+                            confirmButtonText: 'ok',
+                            //cancelButtonText: "Cancelar"
+                        }).then((result) => {
+                            location.href = '@Url.Action("Index","Banco")';
+                        });
+
+                        console.log(resultado);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+
+            }
+
+        }
+
+    </script>
+}

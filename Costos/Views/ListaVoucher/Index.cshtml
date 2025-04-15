@@ -1,0 +1,212 @@
+﻿@{
+    ViewData["Title"] = "Index";
+
+    List<CEntidades.EN_Voucher> _listavoucher = new List<CEntidades.EN_Voucher>();
+    _listavoucher = ViewBag.listavoucher;
+    int contador = 0;
+
+    CEntidades.Login log = new CEntidades.Login();
+    log = ViewBag.login;
+
+    var sessionName = new Byte[20];
+    bool estado = Context.Session.TryGetValue("tipoAlumno", out sessionName);
+
+    string result = "";
+
+    if (estado)
+    {
+        result = System.Text.Encoding.UTF8.GetString(sessionName);
+
+    }
+
+}
+
+
+@section Styles{
+
+    @if (result == "NNN" || result == "EUN")
+    {
+        <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/css/gijgo.min.css" rel="stylesheet" />
+        <link href="~/css/listavoucherninios.css" rel="stylesheet" />
+    }
+    else
+    {
+        <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/css/gijgo.min.css" rel="stylesheet" />
+        <link href="~/css/listavoucher.css" rel="stylesheet" />
+    }
+}
+
+<div class="card col-xl-11 col-lg-11 col-md-11 col-sm-11 col-11 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+        <div class="row">
+            <div class="col-12 title-horarios">
+                <h3>Lista de Pagos Registrados</h3>
+                <h6>@log.fullname</h6>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Código Pago</th>
+                                <th scope="col">Monto</th>
+                                <th scope="col">Fecha Envio</th>
+                                <th scope="col">Hora Envio</th>
+                                <th scope="col">Periodo</th>
+                                <th scope="col">Estado</th>
+                                @*<th scope="col">Ver Link Clases</th>*@
+                                <th scope="col">Detalles</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in _listavoucher)
+                            {
+                                contador = contador + 1;
+                                @if (item.RegistradoC34)
+                                {
+
+                                    @if (item.Eliminado)
+                                    {
+                                        <tr>
+                                            <th scope="row">@contador</th>
+                                            <td>@item.IdTransaccion</td>
+                                            <td>S/@item.Monto.00</td>
+                                            <td>@item.FechaTexto</td>
+                                            <td>@item.Hora</td>
+                                            <td>@item.PeriodoString</td>
+                                            <td class="enproceso"><i class="fa fa-battery-0" aria-hidden="true"></i>Anulado: @item.Motivo </td>
+                                            <td class="icono "><a class="mouse" onclick="detalles(@item.IdTransaccion)"> <i class="fa fa-eye" aria-hidden="true"></i></a></td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <th scope="row">@contador</th>
+                                            <td>@item.IdTransaccion</td>
+                                            <td>S/@item.Monto.00</td>
+                                            <td>@item.FechaTexto</td>
+                                            <td>@item.Hora</td>
+                                            <td>@item.PeriodoString</td>
+                                            <td class="procesado"><i class="fa fa-battery-full" aria-hidden="true"></i> Procesado</td>
+
+                                            <td class="icono "><a class="mouse" onclick="detalles(@item.IdTransaccion)"> <i class="fa fa-eye" aria-hidden="true"></i></a></td>
+                                        </tr>
+                                    }
+
+                                }
+                                else
+                                {
+
+                                    @if (item.Eliminado)
+                                    {
+
+                                        <tr class="fprocesar">
+                                            <th scope="row">@contador</th>
+                                            <td>@item.IdTransaccion</td>
+                                            <td>S/@item.Monto.00</td>
+                                            <td>@item.FechaTexto</td>
+                                            <td>@item.Hora</td>
+                                            <td>@item.PeriodoString</td>
+                                            <td class="enproceso"><i class="fa fa-battery-0" aria-hidden="true"></i> Anulado: @item.Motivo</td>
+
+                                            <td class="icono"><a class="mouse" onclick="detalles(@item.IdTransaccion)"> <i class="fa fa-eye" aria-hidden="true"></i></a></td>
+                                        </tr>
+
+                                    }
+                                    else
+                                    {
+                                        <tr class="fprocesar">
+                                            <th scope="row">@contador</th>
+                                            <td>@item.IdTransaccion</td>
+                                            <td>S/@item.Monto.00</td>
+                                            <td>@item.FechaTexto</td>
+                                            <td>@item.Hora</td>
+                                            <td>@item.PeriodoString</td>
+                                            <td class="enproceso"><i class="fa fa-battery-half" aria-hidden="true"></i> En proceso</td>
+
+                                            <td class="icono"><a class="mouse" onclick="detalles(@item.IdTransaccion)"> <i class="fa fa-eye" aria-hidden="true"></i></a></td>
+                                        </tr>
+                                    }
+
+
+                                }
+
+
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="row">
+                    <!--<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                        <button type="button" class="botones btn btn-outline-primary" onclick="downloadReportPV()">
+                            Descargar Reporte <i class="fa fa-download"></i>
+                        </button>
+                    </div>-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <button type="button" class="botones btn btn-outline-primary" onclick="nuevoVoucherMP()">
+                            Registra tu Matrícula <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <button type="button" class="botones btn btn-outline-primary" onclick="nuevoVoucherPV()">
+                            Otros Pagos <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        .
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div id="modaldescripcion">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal clases-->
+<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div id="modalclases">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/js/gijgo.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/js/messages/messages.es-es.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-storage.js"></script>
+
+    <script>
+        function _cabecera() {
+            return "@Url.Content("~")"; // Handle slashes, nulls, etc...
+        };
+    </script>
+
+
+
+    <script src="~/js/listarvoucher.js"></script>
+
+}
+

@@ -1,0 +1,708 @@
+﻿@{
+    //ViewData["Title"] = "Cuentas";
+    //CEntidades.Banco _datosBanco = new CEntidades.Banco();
+    //_datosBanco = ViewBag.datosBanco;
+
+    @model CEntidades.Banco;
+
+    CEntidades.EN_Voucher datosAlumno = new CEntidades.EN_Voucher();
+    datosAlumno = ViewBag.datosAlumnoVoucher;
+
+    List<CEntidades.EN_Conceptos> conceptos = new List<CEntidades.EN_Conceptos>();
+    conceptos = ViewBag.datosConceptos;
+
+    List<CEntidades.EN_Conceptos> montos = new List<CEntidades.EN_Conceptos>();
+    montos = ViewBag.datosMontos;
+
+    // List<CEntidades.EN_Ciclo_Combo> lciclos = new List<CEntidades.EN_Ciclo_Combo>();
+    // lciclos = ViewBag.ciclos;
+
+    int contador = 0;
+
+    int total = ViewBag.sumatotal;
+
+
+    var sessionName = new Byte[20];
+    bool estado = Context.Session.TryGetValue("tipoAlumno", out sessionName);
+
+    string result = "";
+
+    if (estado)
+    {
+        result = System.Text.Encoding.UTF8.GetString(sessionName);
+
+    }
+
+}
+
+@section Styles{
+    @if (result == "NNN" || result == "EUN")
+    {
+        <link href="~/css/LoginNinios.css" rel="stylesheet" />
+    }
+    else
+    {
+        <link href="~/css/Login.css" rel="stylesheet" />
+    }
+
+}
+
+
+
+<div class="cuadro col-xl-6 col-lg-8 col-md-10 col-sm-10 col-10">
+
+    @if (Model.estado == "ANN")
+    {
+
+        <div class="cabecera">
+            <div class="row">
+                <div class="col-md-4 col-5">
+                    <img src="~/images/logo.png" class="imagen img-fluid" alt="Responsive image" />
+                </div>
+                <div class="col-md-8 col-7">
+                    <h5 class="title-items">Información de los montos a pagar este periodo</h5>
+                </div>
+
+            </div>
+
+            <div class="apellidos">
+                Hola: @Model.fullname
+            </div>
+        </div>
+        <div class="items">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="rojo" scope="col">Académico</th>
+                            <th class="rojo" scope="col">Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fila">Periodo</td>
+                            <td class="fila">@Model.periodostring</td>
+                        </tr>
+                        <tr>
+                            <td class="fila">Ciclo finalizado</td>
+                            <td class="fila">@Model.codcurso_actual</td>
+                        </tr>
+                        <tr>
+                            <td class="fila">Nota final</td>
+                            <td class="fila">@Model.nota_final</td>
+                        </tr>
+                        <tr>
+                            <td class="fila">Curso Siguiente</td>
+                            <td class="fila">@Model.codcurso_siguiente</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label labelconceptos">Agregar conceptos:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <button type="button" class="botones btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                            <i class="fa fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @*<label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label labelconceptos">Agregar libros (opcional):</label>
+                <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                <button type="button" class="botones btn btn-outline-primary" data-toggle="modal" data-target="#modalLibros">
+                <i class="fa fa-plus"></i> Agregar
+                </button>
+                </div>*@
+                    @* <div class="col-12">
+                <p class="avisolibro">*El libro virtual será enviado a su correo electrónico a partir del mes de Octubre.</p>
+                </div>*@
+                </div>
+
+                <div class="form-group">
+                    <div id="tablemontos">
+                        <div class="table-responsive">
+                            <table class="table" id="mtable">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Concepto</th>
+                                        <th scope="col">Monto</th>
+                                        <th scope="col">Quitar</th>
+                                    </tr>
+                                    @foreach (var item in montos)
+                                    {
+                                        contador = contador + 1;
+                                        <tr>
+                                            <td class="celdascentro" scope="row">@contador</td>
+                                            <td class="celdascentro">@item.DesConcepto</td>
+                                            <td class="celdascentro">s/@item.Monto.00</td>
+                                            @if (item.Activo)
+                                            {
+                                                <td class="icono"> <a onclick="quitarelemento(@item.IdConcepto)" class="mouse"> <i class="fa fa-trash" aria-hidden="true"></i></a> </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="icono"> <a class="mouse"> <i class="fa fa-check" aria-hidden="true"></i></a> </td>
+                                            }
+                                        </tr>
+                                    }
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                        <div class="totalcosto">
+                            <h5>El total es: <span class="badge badge-danger">s/@total.00</span></h5>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="indicaciones">
+            <p>*En caso que haya estudiado 2 cursos en el periodo anterior, se está considerando el curso superior como referencia</p>
+            <p style="color:red;font-weight:bold">*Si este mes Ud. está estudiando y tiene deuda la mora de S/10.00 se agregará después del 25 de cada mes.</p>
+        </div>
+
+    }
+    else if (Model.estado == "EUA" || Model.estado == "AME")
+    {
+        <div class="cabecera">
+            <div class="row">
+                <div class="col-md-4 col-5">
+                    <img src="~/images/logo.png" class="imagen img-fluid" alt="Responsive image" />
+                </div>
+                <div class="col-md-8 col-7">
+                    <h5 class="title-items">Información de los montos pendientes de pago</h5>
+                </div>
+
+            </div>
+
+            <div class="apellidos">
+                Hola: @Model.fullname
+            </div>
+        </div>
+
+        <div class="items">
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="rojo" scope="col">Académico</th>
+                        <th class="rojo" scope="col">Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td class="fila">Último Periodo</td>
+                        <td class="fila">@Model.periodostring</td>
+                    </tr>
+                    <tr>
+                        <td class="fila">Último Ciclo</td>
+                        <td class="fila">@Model.codcurso_actual</td>
+                    </tr>
+                    <tr>
+                        <td class="fila">Nota final</td>
+                        <td class="fila">@Model.nota_final</td>
+                    </tr>
+
+                </tbody>
+            </table>
+            @if (Model.estado == "EUA")
+            {
+                <div style="font-size:0.8em">
+                    <p>*Usted ha dejado de estudiar más de 4 meses, por lo que necesita dar un examen de ubicación. Para más información haga clic <a href="http://www.icpnarc.edu.pe/ubicacion/adultos.html">Haz clic aquí</a> </p>
+                </div>
+            }
+            else
+            {
+                <div style="font-size:0.8em">
+                    <p>*Usted ha finalizado el A12 hace mas de 12 meses, por lo que necesita dar un examen de ubicación. Para más información haga clic <a href="http://www.icpnarc.edu.pe/ubicacion/adultos.html">Haz clic aquí</a> </p>
+                    <p style="color:red">*Si este mes Ud. está estudiando y tiene deuda la mora se agregará después del 25 de cada mes.</p>
+                </div>
+            }
+
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="rojo" scope="col">Item</th>
+                        <th class="rojo" scope="col">Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @if (@Model.costo_deuda != "0")
+                    {
+                        <tr>
+                            <td class="fila">Deuda Anterior</td>
+                            <td class="fila">s/@Model.costo_deuda.00</td>
+                        </tr>
+                    }
+                    @if (@Model.costo_mora != "0")
+                    {
+
+                        <tr>
+                            <td class="fila">Mora</td>
+                            <td class="fila">s/@Model.costo_mora.00</td>
+                        </tr>
+                    }
+                    @if (@Model.costo_matricula != "0")
+                    {
+                        <tr>
+                            <td class="fila">Matrícula Anual</td>
+                            <td class="fila">s/@Model.costo_matricula.00</td>
+                        </tr>
+                    }
+
+
+                    <tr>
+                        <td class="fila">Pendiente de pago</td>
+                        <td class="fila">s/@Model.total_pagar.00</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="indicaciones">
+            <p>*En caso que haya estudiado 2 cursos en el periodo anterior, se está considerando el curso superior como referencia</p>
+            <p style="color:red">*Si este mes Ud. está estudiando y tiene deuda la mora se agregará después del 25 de cada mes.</p>
+        </div>
+    }
+    else if (Model.estado == "NNN")
+    {
+
+        <div class="cabecera">
+            <div class="row">
+                <div class="col-md-4 col-5">
+                    <img src="~/images/logo.png" class="imagen img-fluid" alt="Responsive image" />
+                </div>
+                <div class="col-md-8 col-7">
+                    <h5 class="title-items">Información de los montos a pagar este periodo</h5>
+                </div>
+
+            </div>
+
+            <div class="apellidos">
+                Hola: @Model.fullname
+            </div>
+        </div>
+        <div class="items">
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="rojo" scope="col">Académico</th>
+                        <th class="rojo" scope="col">Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fila">Periodo</td>
+                        <td class="fila">@Model.periodostring</td>
+                    </tr>
+                    <tr>
+                        <td class="fila">Ciclo finalizado</td>
+                        <td class="fila">@Model.codcurso_actual</td>
+                    </tr>
+                    <tr>
+                        <td class="fila">Nota final</td>
+                        <td class="fila">@Model.nota_final</td>
+                    </tr>
+                    <tr>
+                        <td class="fila">Curso Siguiente</td>
+                        <td class="fila">@Model.codcurso_siguiente</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="rojo" scope="col">Item</th>
+                        <th class="rojo" scope="col">Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (@Model.costo_deuda != "0")
+                    {
+                        <tr>
+                            <td class="fila">Deuda Anterior</td>
+                            <td class="fila">s/@Model.costo_deuda.00</td>
+                        </tr>
+                    }
+
+                    @if (@Model.costo_mora != "0")
+                    {
+
+                        <tr>
+                            <td class="fila">Mora</td>
+                            <td class="fila">s/@Model.costo_mora.00</td>
+                        </tr>
+                    }
+
+                    @if (Model.costo_pension != "Pensión no definida")
+                    {
+                        <tr>
+                            <td class="fila">Pension Abril</td>
+                            <td class="fila">s/@Model.costo_pension.00</td>
+                        </tr>
+                    }
+                    else
+                    {
+
+                        <tr>
+                            <td class="fila">Pension Abril</td>
+                            <td class="fila">@Model.costo_pension</td>
+                        </tr>
+                    }
+                    @if (@Model.costo_matricula != "0")
+                    {
+                        <tr>
+                            <td class="fila">Matrícula Anual</td>
+                            <td class="fila">s/@Model.costo_matricula.00</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td class="fila">Total a pagar</td>
+                        <td class="fila">s/@Model.total_pagar.00</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
+    }
+    else if (Model.estado == "EUN")
+    {
+        <div class="cabecera">
+            <div class="row">
+                <div class="col-md-4 col-5">
+                    <img src="~/images/logo.png" class="imagen img-fluid" alt="Responsive image" />
+                </div>
+                <div class="col-md-8 col-7">
+                    <h5 class="title-items">Información de los montos pendientes de pago</h5>
+                </div>
+
+            </div>
+
+            <div class="apellidos">
+                Hola: @Model.fullname
+            </div>
+        </div>
+
+        <div class="items">
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="rojo" scope="col">Académico</th>
+                        <th class="rojo" scope="col">Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td class="fila">Último Periodo</td>
+                        <td class="fila">@Model.periodostring</td>
+                    </tr>
+                    <tr>
+                        <td class="fila">Último Ciclo</td>
+                        <td class="fila">@Model.codcurso_actual</td>
+                    </tr>
+                    <tr>
+                        <td class="fila">Nota final</td>
+                        <td class="fila">@Model.nota_final</td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <div style="font-size:0.8em">
+                <p>*Usted ha dejado de estudiar más de 4 periodos, por lo que necesita dar un examen de ubicación. Para más información haga clic <a href="http://www.icpnarc.edu.pe/ubicacion/ninios.html">Haz clic aquí</a> </p>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="rojo" scope="col">Item</th>
+                        <th class="rojo" scope="col">Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @if (@Model.costo_deuda != "0")
+                    {
+                        <tr>
+                            <td class="fila">Deuda Anterior</td>
+                            <td class="fila">s/@Model.costo_deuda.00</td>
+                        </tr>
+                    }
+                    @if (@Model.costo_mora != "0")
+                    {
+
+                        <tr>
+                            <td class="fila">Mora</td>
+                            <td class="fila">s/@Model.costo_mora.00</td>
+                        </tr>
+                    }
+                    @if (@Model.costo_matricula != "0")
+                    {
+                        <tr>
+                            <td class="fila">Matrícula Anual</td>
+                            <td class="fila">s/@Model.costo_matricula.00</td>
+                        </tr>
+                    }
+
+
+                    <tr>
+                        <td class="fila">Pendiente de pago</td>
+                        <td class="fila">s/@Model.total_pagar.00</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    }
+    else if (Model.estado == "AAN" || Model.estado == "AMN" || Model.estado == "AMD")
+    {
+
+        <div class="cabecera">
+            <div class="row">
+                <div class="col-md-4 col-5">
+                    <img src="~/images/logo.png" class="imagen img-fluid" alt="Responsive image" />
+                </div>
+                <div class="col-md-8 col-7">
+                    <h5 class="title-items">Información de los montos a pagar este periodo</h5>
+                </div>
+
+            </div>
+
+            <div class="apellidos">
+                Hola: @Model.fullname
+            </div>
+        </div>
+        <div class="items">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="rojo" scope="col">Académico</th>
+                            <th class="rojo" scope="col">Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td class="fila">Curso Siguiente</td>
+                            <td class="fila">@Model.codcurso_siguiente</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label labelconceptos">Agregar conceptos:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <button type="button" class="botones btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                            <i class="fa fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label labelconceptos">Agregar libros (opcional):</label>
+                    @*<div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                <button type="button" class="botones btn btn-outline-primary" data-toggle="modal" data-target="#modalLibros">
+                <i class="fa fa-plus"></i> Agregar
+                </button>
+                </div>*@
+                    <div class="col-12">
+                        <p class="avisolibro">*El libro virtual se encuentra incluido en su intranet</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div id="tablemontos">
+                        <div class="table-responsive">
+                            <table class="table" id="mtable">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Concepto</th>
+                                        <th scope="col">Monto</th>
+                                        <th scope="col">Quitar</th>
+                                    </tr>
+                                    @foreach (var item in montos)
+                                    {
+                                        contador = contador + 1;
+                                        <tr>
+                                            <td class="celdascentro" scope="row">@contador</td>
+                                            <td class="celdascentro">@item.DesConcepto</td>
+                                            <td class="celdascentro">s/@item.Monto.00</td>
+                                            @if (item.Activo)
+                                            {
+                                                <td class="icono"> <a onclick="quitarelemento(@item.IdConcepto)" class="mouse"> <i class="fa fa-trash" aria-hidden="true"></i></a> </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="icono"> <a class="mouse"> <i class="fa fa-check" aria-hidden="true"></i></a> </td>
+                                            }
+                                        </tr>
+                                    }
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                        <div class="totalcosto">
+                            <h5>El total es: <span class="badge badge-danger">s/@total.00</span></h5>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    }
+
+
+
+
+    @* <div class="botones">
+        <div class="row">
+            <div class="col-12">
+                <button type="button" class="boton btn btn-outline-primary" onclick="descargar()">Descargar</button>
+            </div>
+        </div>
+
+    </div> *@
+
+    @if (Model.estado == "NNN")
+    {
+        <div class="botones">
+            <div class="row">
+                <div class="col-12">
+                    <button type="button" class="boton btn btn-outline-primary" onclick="registrarpago()">Registrar Pago</button>
+                </div>
+            </div>
+
+        </div>
+    }
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Agregar Concepto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Concepto:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12 col-12">
+                        <select class="form-control" id="varconcepto" onchange="validaconcepto()">
+                            <option value="0" selected disabled>Seleccione una opción</option>
+                            @foreach (var item in conceptos)
+                            {
+                                <option value="@item.IdConcepto">@item.DesConcepto</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                    Cerrar <i class="fa fa-window-close" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="btn btn-outline-primary" onclick="agregar()">
+                    Agregar <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal libros -->
+@* <div class="modal fade" id="modalLibros" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Seleccione el curso del cual desea el libro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Curso:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12 col-12">
+                        <select class="form-control" id="varlibro" onchange="validalibro()">
+                            <option value="0" selected disabled>Seleccione una opción</option>
+                            @foreach (var item in lciclos)
+                            {
+                                <option value="@item.CodCiclo">@item.DesCiclo</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                    Cerrar <i class="fa fa-window-close" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="btn btn-outline-primary" onclick="agregarlibro()">
+                    Agregar <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+ *@
+
+
+@section Scripts{
+
+    <script>
+        function _cabecera() {
+            return "@Url.Content("~")"; // Handle slashes, nulls, etc...
+        };
+    </script>
+
+    <script src="~/js/login.js"></script>
+    <script src="~/js/consultasaldo.js"></script>
+
+
+
+    <script>
+        function descargar() {
+            var _caburl = _cabecera();
+            location.href = _caburl + "/" + "ConsultaPago/GeneratePdf";
+        }
+
+    </script>
+    @if (Model.estado == "NNN")
+    {
+        <script>
+            window.onload = _lanzaralerta(@Model.estado_ninios, '@Model.codcurso_siguiente');
+        </script>
+    }
+
+}
+
+

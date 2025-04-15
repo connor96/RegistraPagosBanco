@@ -1,0 +1,188 @@
+﻿@model Recaudacion.BE.beContacto
+@{
+    List<Recaudacion.BE.beTipoContacto> lisTipoContacto = new List<Recaudacion.BE.beTipoContacto>();
+    lisTipoContacto = ViewBag.lisTipoContacto;
+    Layout = null;
+}
+
+@*<script src="~/Scripts/jquery-1.10.2.min.js"></script>*@
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery.form.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#btn-contacto-cancel").click(function () {
+            $("#modulocontenedor").html("<div class='loading-animate'></div>");
+            $("#modulocontenedor").load("@Url.Action("index", "Contacto")", function () {
+                $(document).ready(function () {
+                    $("#btn-agregar-contacto").click(function () {
+                        $("#modulocontenedor").html("<div class='loading-animate'></div>");
+                        $("#modulocontenedor").load("@Url.Action("Create", "Contacto")");
+                    });
+                    $(".btndelete").click(function (e) {
+                        var r = confirm("¿Está seguro de eliminar el registro?");
+                        if (r == true) {
+                            $.ajax({
+                                url: '@Url.Action("Delete", "Contacto")',
+                                type: 'POST',
+                                data: { id: $(this).attr('id') },
+                                dataType: 'json',
+                                success: function (states) {
+                                    if (states.intIdReturn > 0) {
+                                        //alert(r.strMensaje);
+                                        $("#modulocontenedor").html("<div class='loading-animate'></div>");
+                                        $("#modulocontenedor").load("@Url.Action("Index", "Contacto")", function () {
+                                            $(document).ready(function () {
+                                                $("#btn-agregar-contacto").click(function () {
+                                                    $("#modulocontenedor").html("<div class='loading-animate'></div>");
+                                                    $("#modulocontenedor").load("@Url.Action("Create", "Contacto")");
+                                                });
+                                            });
+                                        })
+                                    }
+                                    else {
+                                        alert(states.strMensaje);
+                                    }
+                                },
+                                error: function (ex) {
+                                    Provincia.options.length = 0;
+                                    alert('No se pudo Eliminar dato.' + ex.strMensaje);
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        });
+        $("#frm-alumno-contacto").submit(function () {
+            var formcontacto = $(this);
+            //form.submit.attr("disable");
+            $('input[type="submit"]').attr('disabled', 'disabled');
+            if (formcontacto.validate().form()) {
+                formcontacto.ajaxSubmit({
+                    dataType: 'JSON',
+                    type: 'POST',
+                    url: formcontacto.attr('action'),
+                    success: function (r) {
+                        if (r.intIdReturn > 0) {
+                            //alert(r.strMensaje);
+                            $("#modulocontenedor").html("<div class='loading-animate'></div>");
+                            $("#modulocontenedor").load("@Url.Action("index", "Contacto")", function () {
+                                $(document).ready(function () {
+                                    $("#btn-agregar-contacto").click(function () {
+                                        $("#modulocontenedor").html("<div class='loading-animate'></div>");
+                                        $("#modulocontenedor").load("@Url.Action("Create", "Contacto")");
+                                    });
+                                    $(".btndelete").click(function (e) {
+                                        var r = confirm("¿Está seguro de eliminar el registro?");
+                                        if (r == true) {
+                                            $.ajax({
+                                                url: '@Url.Action("Delete", "Contacto")',
+                                                type: 'POST',
+                                                data: { id: $(this).attr('id') },
+                                                dataType: 'json',
+                                                success: function (states) {
+                                                    if (states.intIdReturn > 0) {
+                                                        //alert(r.strMensaje);
+                                                        $("#modulocontenedor").html("<div class='loading-animate'></div>");
+                                                        $("#modulocontenedor").load("@Url.Action("Index", "Contacto")", function () {
+                                                            $(document).ready(function () {
+                                                                $("#btn-agregar-contacto").click(function () {
+                                                                    $("#modulocontenedor").html("<div class='loading-animate'></div>");
+                                                                    $("#modulocontenedor").load("@Url.Action("Create", "Contacto")");
+                                                                });
+                                                            });
+                                                        })
+                                                    }
+                                                    else {
+                                                        alert(states.strMensaje);
+                                                    }
+                                                },
+                                                error: function (ex) {
+                                                    Provincia.options.length = 0;
+                                                    alert('No se pudo Eliminar dato.' + ex.strMensaje);
+                                                }
+                                            });
+                                        }
+                                    });
+
+                                });
+                            })
+                        }
+                        else {
+                            alert(r.strMensaje);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+            }
+            $('input[type="submit"]').removeAttr('disabled');
+            return false;
+        });
+    });
+</script>
+
+@*@using (Html.BeginForm())*@
+@using (Html.BeginForm("Create", "Contacto", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frm-alumno-contacto" }))
+{
+    @Html.AntiForgeryToken()
+
+    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row form-group">
+                @Html.LabelFor(model => model.IdTipoContacto, htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @*@Html.EditorFor(model => model.IdTipoContacto, new { htmlAttributes = new { @class = "form-control" } })*@
+                    <select name="IdTipoContacto" id="IdTipoContacto" class="form-control" required>
+                        @foreach (var i in lisTipoContacto)
+                        {
+                            <option value="@i.IdTipoContacto">@i.DesTipoContacto</option>
+                        }
+                    </select>
+                    @Html.ValidationMessageFor(model => model.IdTipoContacto, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="row form-group">
+                @Html.LabelFor(model => model.NumMail, htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.NumMail, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NumMail, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="row form-group">
+                @Html.LabelFor(model => model.Obs, htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.Obs, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Obs, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="row form-group">
+                <div class="col-md-12">
+                    @*<input type="checkbox" name="Emergencia" id="Emergencia" /> Es contacto de emergencia*@
+                    @Html.EditorFor(model => model.Emergencia) Es contacto de emergencia
+                    @*@Html.LabelFor(model => model.Emergencia, htmlAttributes: new { @class = "control-label col-md-12" })*@
+                    @Html.ValidationMessageFor(model => model.Emergencia, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <input type="submit" value="Guardar" class="btn btn-primary btn-block" />
+        </div>
+        <div class="col-md-6">
+            <input id="btn-contacto-cancel" type="button" value="Cancelar" class="btn btn-default btn-block" />
+        </div>
+    </div>
+}

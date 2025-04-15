@@ -1,0 +1,226 @@
+﻿@{
+    ViewData["Title"] = "Index";
+
+    var sessionName = new Byte[20];
+    bool estado = Context.Session.TryGetValue("tipoAlumno", out sessionName);
+
+    var sessionName2 = new Byte[20];
+    bool estado2 = Context.Session.TryGetValue("idPersona", out sessionName2);
+
+    List<CEntidades.EN_Curso> cursosmatriculados = new List<CEntidades.EN_Curso>();
+
+    cursosmatriculados = ViewBag.ciclomat;
+
+    string result = "";
+    string result2 = "";
+    string docenteaux = "";
+
+    if (cursosmatriculados.Count() != 0)
+    {
+        docenteaux = cursosmatriculados[0].Docente;
+    }
+
+
+    if (estado)
+    {
+        result = System.Text.Encoding.UTF8.GetString(sessionName);
+
+    }
+
+    if (estado2)
+    {
+        result2 = System.Text.Encoding.UTF8.GetString(sessionName2);
+
+    }
+
+    string notafinal = ViewBag.vdcurso;
+
+}
+
+@section Styles{
+
+
+    <link href="~/css/vouchersmain.css" rel="stylesheet" />
+    
+}
+
+<div class="card col-10 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+
+        @if (docenteaux != "")
+        {
+            <div class="row">
+                @if (cursosmatriculados.Count() == 1)
+                {
+                    <div class="col-12 title-horarios">
+                        <h3 class="titulo">Usted ya ha registrado su matrícula en el siguiente horario para este periodo de Abril</h3>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12 title-horarios">
+                        <h3 class="titulo">Usted ya ha registrado su matrícula en los siguientes horarios para este periodo de Abril</h3>
+                    </div>
+                }
+
+                @foreach (var item in cursosmatriculados)
+                {
+
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <i class="fa fa-check" aria-hidden="true"></i> Modalidad:
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        @item.ModalidadEsp
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <i class="fa fa-check" aria-hidden="true"></i> Frecuencia:
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        @item.Frecuencia
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <i class="fa fa-check" aria-hidden="true"></i> Horario:
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        @item.Horario
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <i class="fa fa-check" aria-hidden="true"></i> Curso:
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        @item.DesCurso
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <i class="fa fa-check" aria-hidden="true"></i> Docente:
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        @item.Docente
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <i class="fa fa-check" aria-hidden="true"></i> Aula:
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        @item.aula
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <i class="fa fa-check" aria-hidden="true"></i> Enlace:
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <a href="@item.Enlace" target="_blank">@item.Enlace</a>
+
+                    </div>
+
+                    <br />
+
+                }
+
+            </div>
+        }
+        else
+        {
+            @if (result == "EUN")
+            {
+                <div class="row">
+                    <div class="col-12 title-horarios">
+                        <h3 class="titulo">Usted ha excedido el plazo, debe rendir un exámen de ubicación</h3>
+                    </div>
+                    <div class="col-12 title-horarios">
+                        <div class="row">
+                            <p>*Usted ha dejado de estudiar más de 4 meses, por lo que necesita dar un examen de ubicación. Para más información haga clic <a href="http://www.icpnarc.edu.pe/ubicacion/ninios.html">Haz clic aquí</a> </p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (result == "EUA")
+            {
+                <div class="row">
+                    <div class="col-12 title-horarios">
+                        <h3 class="titulo">Usted ha excedido el plazo, debe rendir un exámen de ubicación</h3>
+                    </div>
+                    <div class="col-12 title-horarios">
+                        <div class="row">
+                            <p>*Usted ha dejado de estudiar más de 4 meses, por lo que necesita dar un examen de ubicación. Para más información haga clic <a href="http://www.icpnarc.edu.pe/ubicacion/adultos.html">Haz clic aquí</a> </p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (result == "AME")
+            {
+                <div class="row">
+                    <div class="col-12 title-horarios">
+                        <h3 class="titulo">Usted ha excedido el plazo, debe rendir un exámen de ubicación</h3>
+                    </div>
+                    <div class="col-12 title-horarios">
+                        <div class="row">
+                            <p>*Usted ha terminado de estudiar el nivel avanzado hace mas de 12 meses, por lo que necesita dar un examen de ubicación. Para más información haga clic <a href="http://www.icpnarc.edu.pe/ubicacion/adultos.html">Haz clic aquí</a> </p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            else if (result == "NNN" || result == "ANN" || result == "AAN" || result == "AMN" || result == "AMD")
+            {
+                <div class="col-12 title-horarios">
+                    <h3 class="titulo">Registro de Pagos Abril </h3>
+                    <h6 style="color:red">*Recuerda que debes de registrar tu pago de 8:00 am a 6:00 pm de lo contrario será procesado al día siguiente.</h6>
+                </div>
+
+                <div class="col-12">
+                    <div class="row ccursos">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="col-12">
+                                <h5>
+                                    Me matricularé en 1 curso.
+                                </h5>
+                            </div>
+                            <div class="col-12">
+                                <button type="button" class="botones btn btn-outline-primary grande" onclick="obteneropcion(1)">
+                                    Haz clic aquí <i class="fa fa-flag-o"></i>
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                        @if (notafinal == "si")
+                        {
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+
+                                <div class="col-12">
+                                    <h5>
+                                        Me matricularé en 2 cursos.
+                                    </h5>
+                                </div>
+
+                                <div class="col-12">
+                                    <button type="button" class="botones btn btn-outline-success grande" onclick="obteneropcion(2)">
+                                        Haz clic aquí <i class="fa fa-flag"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            }
+
+        }
+
+    </div>
+
+</div>
+
+
+@section Scripts{
+
+    <script>
+        function _cabecera() {
+            return "@Url.Content("~")";
+        };
+    </script>
+
+    <script src="~/js/indexvoucher.js"></script>
+
+}

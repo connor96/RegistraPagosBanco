@@ -1,0 +1,116 @@
+﻿@model Recaudacion.BE.bePersonaInstitucion
+@{
+    List<Recaudacion.BE.beOcupacion> lisOcupacion = new List<Recaudacion.BE.beOcupacion>();
+    List<Recaudacion.BE.beCECarrera> lisCECarrera = new List<Recaudacion.BE.beCECarrera>();
+    List<Recaudacion.BE.beCE> lisCE = new List<Recaudacion.BE.beCE>();
+    lisOcupacion = ViewBag.lisOcupacion;
+    lisCECarrera = ViewBag.lisCECarrera;
+    lisCE = ViewBag.lisCE;
+    Layout = null;
+}
+
+@using (Html.BeginForm("Edit", "PersonaInstitucion", FormMethod.Post, new { enctype = "multipart/form-data", @id = "frm-alumno-institucion" }))
+{
+    @Html.AntiForgeryToken()
+
+    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row form-group">
+                @Html.LabelFor(model => model.IdOcupacion, htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    <select name="IdOcupacion" id="idOcupacion" class="form-control" onchange="cambiarOcupacion(this)">
+                        @foreach (var item in lisOcupacion)
+                        {
+                            if (item.IdOcupacion == Model.IdOcupacion)
+                            {
+                                <option value="@item.IdOcupacion" selected>@item.DesOcupacion.ToUpper()</option>
+                            }
+                            else
+                            {
+                                <option value="@item.IdOcupacion">@item.DesOcupacion.ToUpper()</option>
+                            }
+                        }
+                    </select>
+                    @Html.ValidationMessageFor(model => model.IdOcupacion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 opcional2">
+            <div class="row form-group">
+                @Html.LabelFor(model => model.IdCE, htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @*@Html.EditorFor(model => model.IdCE, new { htmlAttributes = new { @class = "form-control" } })*@
+                    <select name="IdCE" id="IdCE" class="form-control select2" onchange="cambiarCarrera(this)">
+                        @foreach (var item in lisCE)
+                        {
+                            if (item.IdCE == Model.IdCE)
+                            {
+                                <option value="@item.IdCE" selected>@item.NombreCE.ToUpper()</option>
+                            }
+                            else
+                            {
+                                <option value="@item.IdCE">@item.NombreCE.ToUpper()</option>
+                            }
+                        }
+                    </select>
+                    @Html.ValidationMessageFor(model => model.IdCE, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 opcional">
+            <div class="row form-group">
+                @Html.LabelFor(model => model.IdCarrera, htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @*@Html.EditorFor(model => model.IdCarrera, new { htmlAttributes = new { @class = "form-control" } })*@
+                    <select name="IdCarrera" id="IdCarrera" class="form-control select2">
+                        @foreach (var item in lisCECarrera)
+                        {
+                            if (item.IdCarrera == Model.IdCarrera)
+                            {
+                                <option value="@item.IdCarrera" selected>@item.DesCarrera.ToUpper()</option>
+                            }
+                            else
+                            {
+                                <option value="@item.IdCarrera">@item.DesCarrera.ToUpper()</option>
+                            }
+                        }
+                    </select>
+                    @Html.ValidationMessageFor(model => model.IdCarrera, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 opcional">
+            <div class="row form-group">
+                @Html.LabelFor(model => model.NCarnet, htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.NCarnet, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NCarnet, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 opcional">
+            <div class="row form-group">
+                @Html.LabelFor(model => model.FVencimiento, htmlAttributes: new { @class = "control-label col-md-12" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.FVencimiento, new { htmlAttributes = new { @class = "form-control", @type = "text", @placeholder = "dd/mm/yyyy" } })
+                    @Html.ValidationMessageFor(model => model.FVencimiento, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <a class="btn btn-outline btn-primary" href="@Url.Action("Index", "Home")"><samp class="glyphicon glyphicon-chevron-left"></samp> Retornar sin guardar</a>
+        </div>
+
+        <div class="col-md-6">
+            <input type="submit" value="Guardar" class="btn btn-primary btn-block" />
+        </div>
+    </div>
+}
+
+

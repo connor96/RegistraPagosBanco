@@ -1,0 +1,349 @@
+﻿
+@{
+    string resultado = ViewBag.resultado;
+    ViewData["Title"] = "Index";
+}
+
+@section Styles {
+    <link href="~/css/vouchersmain.css" rel="stylesheet" />
+}
+
+<div class="card col-10 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+
+
+        @if (resultado=="1")
+        {
+            //Alumno resultar niños
+
+            <div class="col-12 title-horarios">
+                <h3 class="titulo">Registro de Pagos Abril </h3>
+                <h6 style="color:red">*Recuerda que debes de registrar tu pago de 8:00 am a 6:00 pm de lo contrario será procesado al día siguiente.</h6>
+            </div>
+
+            <div class="col-12">
+                <div class="row ccursos">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col-12">
+                            <h5>
+                                Me matricularé en 1 curso.
+                            </h5>
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="botones btn btn-outline-primary grande" onclick="location.href='@Url.Action("programacionNinios","Programacion")'">
+                                Haz clic aquí <i class="fa fa-flag-o"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        }
+        else if (resultado == "2")
+        {
+            //Alumno Desaprobado - Interfaz 1 curso
+
+
+            <div class="col-12 title-horarios">
+                <h3 class="titulo">Registro de Pagos Abril </h3>
+                <h6 style="color:red">*Recuerda que debes de registrar tu pago de 8:00 am a 6:00 pm de lo contrario será procesado al día siguiente.</h6>
+            </div>
+
+            <div class="col-12">
+                <div class="row ccursos">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col-12">
+                            <h5>
+                                Me matricularé en 1 curso.
+                            </h5>
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="botones btn btn-outline-primary grande" onclick="location.href='@Url.Action("programacionNinios","Programacion")'">
+                                Haz clic aquí <i class="fa fa-flag-o"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        }
+        else if (resultado == "3")
+        {
+            //Alumno Examen de ubicacion - Interfaz examen de ubicacion
+
+            <div class="row">
+                <div class="col-12 title-horarios">
+                    <h3 class="titulo">Usted ha excedido el plazo, debe rendir un exámen de ubicación</h3>
+                </div>
+                <div class="col-12 title-horarios">
+                    <div class="row">
+                        <p>*Usted ha terminado de estudiar el nivel avanzado hace mas de 12 meses, por lo que necesita dar un examen de ubicación. Para más información haga clic <a href="http://www.icpnarc.edu.pe/ubicacion/adultos.html">Haz clic aquí</a> </p>
+                    </div>
+                </div>
+            </div>
+
+
+
+        }
+        else if (resultado == "4")
+        {
+            //Alumno con Deuda - Interfaz Deuda
+           <div class="row">
+                <div class="col-12 title-horarios">
+                    <h3 class="titulo" style="color:red !important">Usted tiene una deuda pendiente</h3>
+                </div>
+                <div class="col-12 title-horarios">
+                    <div class="row">
+                        <p style="color:black !important">*Usted tiene una deuda pendiente la cual debe cancelar antes de proseguir con el proceso. Haga clic en el siguiente botón para cancelar la deuda.
+                        <br />
+                           
+                        </p>
+
+                        
+                    </div>
+
+                    <a class="btn btn-outline-danger" onclick="location.href='@Url.Action("Index","Deuda")'">Cancelar Deuda</a>
+
+                </div>
+            </div>
+
+
+
+        }
+       
+        else if (resultado == "6")
+        {
+            //Alumno Promovido por examen de ubicacion - Interfaz 1 curso
+
+            <div class="col-12 title-horarios">
+                <h3 class="titulo">Registro de Pagos Abril </h3>
+                <h6 style="color:red">*Recuerda que debes de registrar tu pago de 8:00 am a 6:00 pm de lo contrario será procesado al día siguiente.</h6>
+            </div>
+
+            <div class="col-12">
+                <div class="row ccursos">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col-12">
+                            <h5>
+                                Haz clic para registrar tu matrícula
+                            </h5>
+                        </div>
+                        <div class="col-12">
+                            <div class="col-12">
+                                <button type="button" class="botones btn btn-outline-primary grande" onclick="location.href='@Url.Action("programacionNinios","Programacion")'">
+                                    Haz clic aquí <i class="fa fa-flag-o"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        }
+        else if (resultado == "8")
+        {
+            //Alumno Regular - Interfaz 2 cursos
+
+            <div class="col-12 title-horarios">
+                <h3 class="titulo">Registro de Pagos Abril </h3>
+                <h6 style="color:red">*Recuerda que debes de registrar tu pago de 8:00 am a 6:00 pm de lo contrario será procesado al día siguiente.</h6>
+            </div>
+
+            <div class="col-12">
+                <div class="row ccursos">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col-12">
+                            <h5>
+                                Me matricularé en 1 curso
+                            </h5>
+                        </div>
+                        <div class="col-12">
+                            <div class="col-12">
+                                <button type="button" class="botones btn btn-outline-primary grande" onclick="location.href='@Url.Action("programacionNinios","Programacion")'">
+                                    Haz clic aquí <i class="fa fa-flag-o"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    @* <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col-12">
+                            <h5>
+                                Me matricularé en 2 cursos
+                            </h5>
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="botones btn btn-outline-primary grande">
+                                Haz clic aquí <i class="fa fa-flag-o"></i>
+                            </button>
+                        </div>
+
+                    </div> *@
+
+                </div>
+
+            </div>
+
+
+        }
+        else if (resultado == "9")
+        {
+            //Alumno Regular 1 curso (Alumno que llevo 2 cursos y se desaprobo 1)
+
+            <div class="col-12 title-horarios">
+                <h3 class="titulo">Registro de Pagos Abril </h3>
+                <h6 style="color:red">*Recuerda que debes de registrar tu pago de 8:00 am a 6:00 pm de lo contrario será procesado al día siguiente.</h6>
+            </div>
+
+            <div class="col-12">
+                <div class="row ccursos">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col-12">
+                            <button type="button" class="botones btn btn-outline-primary grande" onclick="location.href='@Url.Action("programacionNinios","Programacion")'">
+                                Haz clic aquí <i class="fa fa-flag-o"></i>
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="botones btn btn-outline-primary grande">
+                                Haz clic aquí <i class="fa fa-flag-o"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        }
+        else if (resultado == "10")
+        {
+            //Alumnos Regular 2 cursos (Alumno que aprobo los 2 cursos)
+
+            <div class="col-12 title-horarios">
+                <h3 class="titulo">Registro de Pagos Abril </h3>
+                <h6 style="color:red">*Recuerda que debes de registrar tu pago de 8:00 am a 6:00 pm de lo contrario será procesado al día siguiente.</h6>
+            </div>
+
+            <div class="col-12">
+                <div class="row ccursos">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col-12">
+                            <button type="button" class="botones btn btn-outline-primary grande" onclick="location.href='@Url.Action("programacionNinios","Programacion")'">
+                                Haz clic aquí <i class="fa fa-flag-o"></i>
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="botones btn btn-outline-primary grande">
+                                Haz clic aquí <i class="fa fa-flag-o"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    @* <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col-12">
+                            <h5>
+                                Me matricularé en 2 cursos
+                            </h5>
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="botones btn btn-outline-primary grande">
+                                Haz clic aquí <i class="fa fa-flag-o"></i>
+                            </button>
+                        </div>
+
+                    </div> *@
+
+                </div>
+
+            </div>
+
+
+        }
+        else if (resultado == "11")
+        {
+            //Alumno autorizado adultos - Interfaz 2 curso
+
+            <div class="col-12 title-horarios">
+                <h3 class="titulo">Registro de Pagos Abril </h3>
+                <h6 style="color:red">*Recuerda que debes de registrar tu pago de 8:00 am a 6:00 pm de lo contrario será procesado al día siguiente.</h6>
+            </div>
+
+            <div class="col-12">
+                <div class="row ccursos">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col-12">
+                            <button type="button" class="botones btn btn-outline-primary grande" onclick="location.href='@Url.Action("programacionNinios","Programacion")'">
+                                Haz clic aquí <i class="fa fa-flag-o"></i>
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="botones btn btn-outline-primary grande">
+                                Haz clic aquí <i class="fa fa-flag-o"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        }
+        else if (resultado == "12")
+        {
+            //Alumno autorizado niños - Interfaz 1 curso
+
+            <div class="col-12 title-horarios">
+                <h3 class="titulo">Registro de Pagos Abril </h3>
+                <h6 style="color:red">*Recuerda que debes de registrar tu pago de 8:00 am a 6:00 pm de lo contrario será procesado al día siguiente.</h6>
+            </div>
+
+            <div class="col-12">
+                <div class="row ccursos">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col-12">
+                            <button type="button" class="botones btn btn-outline-primary grande" onclick="location.href='@Url.Action("programacionNinios","Programacion")'">
+                                Haz clic aquí <i class="fa fa-flag-o"></i>
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="botones btn btn-outline-primary grande">
+                                Haz clic aquí <i class="fa fa-flag-o"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+        }else{
+            //Interfaz fallida
+        }
+
+
+
+
+     </div>
+</div>
+

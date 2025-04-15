@@ -1,0 +1,30 @@
+﻿@{
+    Layout = null;
+
+    List<CEntidades.EN_Voucher_Pago> vpago = new List<CEntidades.EN_Voucher_Pago>();
+    vpago = ViewBag.vcargados;
+
+}
+
+<div class="col-12">
+    <div class="row">
+        @foreach (var item in vpago)
+        {
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="card cardvoucher">
+                    <div class="card-body">
+                        <h5 class="card-title">Nro operación: @item.nrooperacion</h5>
+                        <p class="card-text">Banco: @item.banco</p>
+                        <button class="btn btn-outline-primary" onclick="vervoucher(@item.nrooperacion)">
+                            <i class="fa fa-eye" aria-hidden="true"></i> Detalles
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="quitarvoucher(@item.nrooperacion)">
+                            <i class="fa fa-trash" aria-hidden="true"></i> Quitar
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

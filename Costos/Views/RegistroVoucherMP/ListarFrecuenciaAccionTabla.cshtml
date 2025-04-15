@@ -1,0 +1,201 @@
+﻿@{
+    Layout = null;
+
+    List<CEntidades.EN_PHoraria> ListaPHoraria = new List<CEntidades.EN_PHoraria>();
+    ListaPHoraria = ViewBag.ListaHoraria;
+
+    CEntidades.EN_Frecuencia FManana = new CEntidades.EN_Frecuencia();
+    FManana = ViewBag.FrecuenciaManana;
+
+    CEntidades.EN_Frecuencia FTarde = new CEntidades.EN_Frecuencia();
+    FTarde = ViewBag.FrecuenciaTarde;
+
+    CEntidades.EN_Frecuencia FNoche = new CEntidades.EN_Frecuencia();
+    FNoche = ViewBag.FrecuenciaNoche;
+
+}
+<div id="tableciclos">
+    <div class="card card-title">
+        <div class="card-body">
+            @foreach (var item in ListaPHoraria)
+            {
+                <h3 class="title-curso">Curso: @item.curso</h3>
+                <h5>@item.modalidad_esp</h5>
+            }
+        </div>
+    </div>
+
+    @if (FManana.idTurno != null)
+    {
+        <div class="card horario">
+            <div class="card-header mananas">
+                <i class="fa fa-sun-o" aria-hidden="true"></i> Mañanas
+
+            </div>
+            <div class="card-body contenedor row">
+
+                @foreach (var item in FManana.Programacion)
+                {
+
+                    @if (item.Visible)
+                    {
+                        <div class="list-group list-group-flush col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="list-group-item item-horario ">
+
+
+                                <label>
+                                    <input type="radio" name="radio" onclick="obtenervalor(@item.idCiclo,@item.idsede,@item.mes,@item.anio)" />
+                                    <span class="title-horariomanana">Horario: @item.fullhora</span>
+                                </label>
+
+                                @if (item.presencial)
+                                {
+                                    <p class="contenido-contenido"><span class="badge badge-pill badge-danger">PRESENCIAL</span></p>
+                                }
+                                else
+                                {
+                                    <p class="contenido-contenido"><span class="badge badge-pill badge-success">VIRTUAL</span></p>
+                                }
+
+                                <p class="contenido-contenido">Aula: @item.aula</p>
+
+                                <p class="contenido-contenido" style="color:red !important;font-weight:bold">Vacantes: @item.Vacantes</p>
+
+
+                                <p class="contenido-contenido">Docente: @item.Apellidos</p>
+
+                                @foreach (var itm in item.Contacto)
+                                {
+                                    @if (itm.IdTipoContacto == 1)
+                                    {
+                                        <p class="contenido-contenido">Email: @itm.NumMail</p>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+
+                }
+
+            </div>
+        </div>
+    }
+
+    @if (FTarde.idTurno != null)
+    {
+        <div class="card horario">
+            <div class="card-header tardes">
+                <i class="fa fa-cloud" aria-hidden="true"></i> Tardes
+            </div>
+            <div class="card-body contenedor row">
+
+                @foreach (var item in FTarde.Programacion)
+                {
+
+                    @if (item.Visible)
+                    {
+                        <div class="list-group list-group-flush col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="list-group-item item-horario ">
+
+
+                                <label>
+                                    <input type="radio" name="radio" onclick="obtenervalor(@item.idCiclo,@item.idsede,@item.mes,@item.anio)" />
+                                    <span class="title-horariomanana">Horario: @item.fullhora</span>
+                                </label>
+
+
+
+                                @if (item.presencial)
+                                {
+                                    <p class="contenido-contenido"><span class="badge badge-pill badge-danger">PRESENCIAL</span></p>
+                                }
+                                else
+                                {
+                                    <p class="contenido-contenido"><span class="badge badge-pill badge-success">VIRTUAL</span></p>
+                                }
+
+                                <p class="contenido-contenido">Aula: @item.aula</p>
+
+                                <p class="contenido-contenido" style="color:red !important;font-weight:bold">Vacantes: @item.Vacantes</p>
+
+
+                                <p class="contenido-contenido">Docente: @item.Apellidos</p>
+
+                                @foreach (var itm in item.Contacto)
+                                {
+                                    @if (itm.IdTipoContacto == 1)
+                                    {
+                                        <p class="contenido-contenido">Email: @itm.NumMail</p>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+
+
+
+                }
+
+            </div>
+
+
+        </div>
+    }
+
+    @if (FNoche.idTurno != null)
+    {
+        <div class="card horario">
+            <div class="card-header noches">
+                <i class="fa fa-moon-o"></i> Noches
+            </div>
+            <div class="card-body contenedor row">
+
+                @foreach (var item in FNoche.Programacion)
+                {
+                    @if (item.Visible)
+                    {
+
+                        <div class="list-group list-group-flush col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="list-group-item item-horario ">
+
+                                <label>
+                                    <input type="radio" name="radio" onclick="obtenervalor(@item.idCiclo,@item.idsede,@item.mes,@item.anio)" />
+                                    <span class="title-horariomanana">Horario: @item.fullhora</span>
+                                </label>
+
+
+
+                                @if (item.presencial)
+                                {
+                                    <p class="contenido-contenido"><span class="badge badge-pill badge-danger">PRESENCIAL</span></p>
+                                }
+                                else
+                                {
+                                    <p class="contenido-contenido"><span class="badge badge-pill badge-success">VIRTUAL</span></p>
+                                }
+
+                                <p class="contenido-contenido">Aula: @item.aula</p>
+
+                                <p class="contenido-contenido" style="color:red !important;font-weight:bold">Vacantes: @item.Vacantes</p>
+
+
+                                <p class="contenido-contenido">Docente: @item.Apellidos</p>
+
+                                @foreach (var itm in item.Contacto)
+                                {
+                                    @if (itm.IdTipoContacto == 1)
+                                    {
+                                        <p class="contenido-contenido">Email: @itm.NumMail</p>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                    }
+                }
+
+            </div>
+        </div>
+    }
+</div>
+

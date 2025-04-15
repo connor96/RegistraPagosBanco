@@ -1,0 +1,61 @@
+﻿body {
+    background: rgb(231,100,0);
+    background: linear-gradient(45deg, rgba(231,100,0,1) 0%, rgba(255,81,0,1) 49%, rgba(255,171,0,1) 100%);
+}
+
+div.alumno {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.opciones-alumno {
+    margin-top: 1em;
+}
+
+.title-horarios {
+    text-align: center;
+    color: #006e99;
+    padding-bottom: 0.8em;
+}
+
+.mouse {
+    cursor: pointer;
+    text-align: center;
+}
+
+.icono {
+    text-align: center;
+}
+
+.contenido {
+    font-size: 1em;
+}
+
+.botones {
+    width: 100%;
+    margin-top: 1em;
+}
+
+.procesado {
+    color: #007006;
+}
+
+.enproceso {
+    color: red;
+}
+
+.fprocesar {
+    background-color: #e6e6e6
+}
+
+.texto {
+    line-height: 38px;
+}
+
+.list-group-item {
+    padding: .01rem 1.25rem !important;
+}
+
+.especial {
+    font-size: 0.8em !important;
+}

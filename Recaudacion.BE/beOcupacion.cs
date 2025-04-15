@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Recaudacion.BE
+{
+    public class beOcupacion
+    {
+        public int IdOcupacion { get; set; }
+        public string DesOcupacion { get; set; }
+    }
+}

@@ -1,0 +1,119 @@
+﻿@using CEntidades
+
+@{
+    ViewData["Title"] = "Index";
+
+    EN_ObtenerDeudaCabecera cabeceraDeuda = ViewBag.cabeceraDeuda;
+    List<EN_ObtenerDeudaDeuda> listaDeudas = ViewBag.listaDeudas;
+    string resultado = ViewBag.resultado;
+
+    decimal suma=0;
+    int contador = 1;
+
+}
+
+@section Styles {
+
+    <link href="~/css/voucherMP.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/css/gijgo.min.css" rel="stylesheet" />
+}
+
+<div class="card col-xl-8 col-lg-8 col-md-10 col-sm-10 col-10 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+
+        @if (resultado=="13")
+        {
+            <div class="row">
+                <div class="col-12 title-horarios">
+                    <h3 style="color:red">Registro de Deuda </h3>
+                    <p style="color:black">
+                        Usted tiene una deuda correspondiente a @cabeceraDeuda.deuda - @cabeceraDeuda.monto en la sede de @cabeceraDeuda.sede
+                    </p>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+                    <div class="form-group">
+                        <div id="tablemontos">
+                            <div class="table-responsive">
+                                <table class="table" id="mtable">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Concepto</th>
+                                            <th scope="col">Monto</th>
+                                        </tr>
+                                        @foreach (var item in listaDeudas)
+                                        {
+                                            contador = contador + 1;
+                                            <tr>
+                                                <td scope="row">@contador</td>
+                                                <td>@item.descripcion</td>
+                                                <td>s/@item.monto</td>
+                                            </tr>
+                                            suma = suma + @item.monto;
+                                        }
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                            <div class="totalcosto">
+                                <h5>El total es: <span class="badge badge-danger">s/@suma</span></h5>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <br />
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt-3">
+
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <button type="button" class="botones btn btn-outline-primary" onclick="registrarDeuda()">
+                                    Registrar <i class="fa fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }else{
+            <h3 style="color:red">ha ocurrido un error al momento de registrar la deuda </h3>
+        }
+        
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function registrarDeuda(){
+
+            $.ajax({
+            url:  '@Url.Action("RegistroDeuda", "Deuda")',
+            type: "POST",
+            success: function (resultado) {
+                swal({
+                    title: "Éxito",
+                    text: "Se ha registrado su pago correctamente",
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonColor: '#004f9e',
+                    //cancelButtonColor: '#d33',
+                    confirmButtonText: 'ok',
+                    //cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    location.href = '@Url.Action("Index", "Banco")';
+                });
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                }
+            });
+        }
+
+    </script>
+}

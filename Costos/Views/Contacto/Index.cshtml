@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Recaudacion.BE.beContacto>
+<div id="lisContactos" class="table-responsive small">
+    <table class="table" width="100%">
+        <thead>
+            <tr>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.itmTipoContacto.DesTipoContacto)*@
+                    Tipo
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.NumMail)*@
+                    Nro / Correo
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.Emergencia)*@
+                    Emer.
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.Obs)*@
+                    Apoderado
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.itmTipoContacto.DesTipoContacto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumMail)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Emergencia)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Obs)
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-xs">
+                            <button type="button" class="btn btn-danger btndelete" id="@item.rowguid">
+                                <span class="glyphicon glyphicon-trash small"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <a class="btn btn-outline btn-primary" href="@Url.Action("Index", "Home")"><samp class="glyphicon glyphicon-chevron-left"></samp> Retornar sin guardar</a>
+    </div>
+    <div class="col-md-6">
+        <button id="btn-agregar-contacto" class="btn btn-primary">Agrear contacto</button>
+    </div>
+</div>

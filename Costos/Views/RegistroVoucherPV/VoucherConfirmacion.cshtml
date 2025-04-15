@@ -1,0 +1,144 @@
+﻿@{
+    ViewData["Title"] = "VoucherConfirmacion";
+    CEntidades.EN_Voucher_Pagado voucher = new CEntidades.EN_Voucher_Pagado();
+    voucher = ViewBag.voucherTransaccion;
+    int contador = 0;
+}
+
+
+@section Styles{
+
+    <link href="~/css/voucherMP.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/css/gijgo.min.css" rel="stylesheet" />
+    <link href="~/css/voucherConfirmacion.css" rel="stylesheet" />
+
+}
+
+
+<div class="card col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+        <div class="row">
+            <div class="col-12 title-horarios">
+                <h3>Resumen de Transacción realizada</h3>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Alumno:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        @voucher.Fullname
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="table-responsive">
+                        <table class="table" id="mtable">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Concepto</th>
+                                    <th scope="col">Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in voucher.conceptos)
+                                {
+                                    contador = contador + 1;
+                                    <tr>
+                                        <th scope="row">@contador</th>
+                                        <td>@item.DesConcepto</td>
+                                        <td>s/@item.Monto.00</td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                @foreach (var item in voucher.vouchersregistrados)
+                {
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Banco:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            @item.banco
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Número de Operación:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            @item.nrooperacion
+                        </div>
+                    </div>
+
+                }
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Monto:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <div class="quantity">
+                            s/@voucher.monto.00
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Estado:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <div class="quantity">
+                            En proceso
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                        <button type="button" class="botones btn btn-outline-primary" onclick="downloadReportPV()">
+                            Descargar <i class="fa fa-download"></i>
+                        </button>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                        <button type="button" class="botones btn btn-outline-primary" onclick="listaVouchers()">
+                            Lista de Pagos <i class="fa fa-list-alt"></i>
+                        </button>
+                    </div>
+                    <div class="col-xl-4 col-lg-6 col-md-4 col-sm-12 col-12">
+                        <button type="button" class="botones btn btn-outline-primary" onclick="nuevoVoucherPV()">
+                            Nuevo Pago Otros Pagos <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        .
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/js/gijgo.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/js/messages/messages.es-es.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-storage.js"></script>
+
+    <script>
+        function _cabecera() {
+            return "@Url.Content("~")"; // Handle slashes, nulls, etc...
+        };
+    </script>
+
+
+    <script src="~/js/VoucherConfirmacion.js"></script>
+
+}
+
+
+

@@ -1,0 +1,214 @@
+﻿@using CEntidades
+
+@{
+    ViewData["Title"] = "Programacion Ninios";
+    
+    IEnumerable<EN_BancoSede> listaSedes = ViewBag.listaSedes;
+    EN_BencoCursoCabecera cursoNivel=  ViewBag.cursoNivel;
+
+
+}
+
+@section Styles {
+    <link href="~/css/vouchersmain.css" rel="stylesheet" />
+}
+
+<div class="card col-10 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+        
+        <div class="row">
+            <div class="col-12 title-horarios">
+                <h3 class="titulo">Registro de Pagos Abril - Paso 1 de 2</h3>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-title">
+                            <div class="card-body">
+                                <h3 class="title-curso-sugerido">Nivel que le corresponde =>  @cursoNivel.programa @cursoNivel.nivel </h3>
+                                <h5 class="title-curso-sugerido">
+                                    <div class="left">
+                                        Curso que le corresponde => @cursoNivel.desCurso
+                                    </div>
+                                    <div class="middle">
+                                    </div>
+
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col col-md-6 col-sm-6 col-12">
+                        <label for="exampleFormControlSelect1" class="seleccionadores"><div class="numeracion">1</div>Seleccione la Sede</label>
+                        <select class="form-control" id="programacionSede">
+                            <option value="0" disabled selected>Seleccione una opción</option>
+                            @foreach (var item in listaSedes)
+                            {
+                                <option value="@item.IdSede">@item.Sede</option>
+                            }
+                        </select>
+                    </div>
+    
+                    <div class="col col-md-6 col-sm-6 col-12">
+                        <label for="exampleFormControlSelect1" class="seleccionadores"><div class="numeracion">2</div> Seleccione la Frecuencia</label>
+                        <select class="form-control" id="programacionFrecuencia">
+                            <option value="0" disabled selected>Seleccione una opción</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-12 btnbuscar">
+                        
+                        <button type="button" class="btn btn-outline-primary grande" onclick="buscarProgramacion()">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                            Buscar
+                        </button>
+                    </div>
+
+                    <div class="col-12 datos">
+
+                        <div id="tablaalumnos">
+                            <div class="loading" id="loading">
+                                <div class="spinner-grow text-primary"></div>
+                                <div class="spinner-grow text-secondary"></div>
+                                <div class="spinner-grow text-danger"></div>
+                                <div class="spinner-grow text-warning"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 btnbuscar">
+            <button type="button" class="btn btn-outline-success grande" onclick="siguientePagina()">
+                Siguiente <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </button>
+        </div>
+    
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        var _idCiclo=null;
+
+        function cleanddl(objeto) {
+            $("#" + objeto)
+                .empty()
+                .append("<option disabled selected>Selecciona una opción</option>");
+        }
+
+        $('#programacionSede').change(function () {
+            var n = $("#programacionSede").val();
+            var today = new Date();
+            var a = today.getFullYear();
+            //---------------------------------
+            var m = today.getMonth() + 1;
+            CargarNiveles(n, a, m);
+        });
+
+        function CargarNiveles(idsede, anio, mes){
+
+            cleanddl("programacionFrecuencia");
+            
+            $.ajax({
+                url:  '@Url.Action("obtenerFrecuencia", "Programacion")',
+                type: "POST",
+                data: { idSede: idsede},
+                success: function (resultado) {
+                    console.log(resultado);
+                    $.each(resultado, function (key, item) {
+                        $("#programacionFrecuencia").append('<option value="' + item.idmodalidad + '">' + item.modalidad_eng + '</option>');
+                    });
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
+        function buscarProgramacion(){
+
+                if ($('#programacionSede').val() == null || $('#programacionFrecuencia').val() == null ) {
+                    alerta();
+                } else {
+                    $("#loading").addClass("version").addClass("text-center");
+                    console.log("Entro a listar frecuencia");
+                    //---------------------------------
+                    var today = new Date();
+                    var a = today.getFullYear();
+                    //---------------------------------
+                    var m = today.getMonth() + 2;
+                    var sede = $("#programacionSede").val();
+                    var mod = $("#programacionFrecuencia").val();
+                    //---------------------------------
+                    var url = '@Url.Action("ListarFrecuenciaAccionTabla", "RegistroVoucherMP")';
+                    var data = { idsede: sede, modalidad: mod };
+                    $("#tablaalumnos").load(url, data);
+                }
+        }
+
+
+        function alerta() {
+            swal({
+                title: "Seleccione los datos que faltan",
+                //text: "Esta acción ya no se podrá deshacer, Así que piénsalo bien.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: '#ff0d00',
+                //cancelButtonColor: '#d33',
+                confirmButtonText: 'ok',
+                //cancelButtonText: "Cancelar"
+            });
+        }
+
+
+        function obtenervalor(idCiclo,idSede,mes,anio) {
+            _idCiclo=idCiclo;
+            $.ajax({
+                url:  '@Url.Action("registrarPrematricula", "Programacion")',
+                type: "POST",
+                data: { idCiclo: idCiclo},
+                success: function (resultado) {
+                    console.log(resultado);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
+        function siguientePagina(){
+           if (_idCiclo != null) {
+                location.href = '@Url.Action("TablaPagosPensiones", "Banco")';
+
+            } else {
+                alertaRadio();
+            }
+        }
+
+
+        function alertaRadio() {
+            swal({
+                title: "Agregue un ciclo",
+                //text: "Esta acción ya no se podrá deshacer, Así que piénsalo bien.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: '#ff0d00',
+                //cancelButtonColor: '#d33',
+                confirmButtonText: 'ok',
+                //cancelButtonText: "Cancelar"
+            });
+        }
+
+
+
+    </script>
+
+
+}

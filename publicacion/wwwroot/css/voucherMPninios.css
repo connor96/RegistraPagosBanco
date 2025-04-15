@@ -1,0 +1,206 @@
+﻿body {
+    background: rgb(231,100,0);
+    background: linear-gradient(45deg, rgba(231,100,0,1) 0%, rgba(255,81,0,1) 49%, rgba(255,171,0,1) 100%);
+}
+
+div.alumno {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.opciones-alumno {
+    margin-top: 1em;
+}
+
+.quantity {
+    position: relative;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.quantity input {
+    width: 100%;
+    height: 42px;
+    line-height: 1.65;
+    float: left;
+    display: block;
+    padding: 0;
+    margin: 0;
+    padding-left: 20px;
+    border: 1px solid #eee;
+}
+
+    .quantity input:focus {
+        outline: 0;
+    }
+
+.quantity-nav {
+    float: left;
+    position: relative;
+    height: 42px;
+}
+
+.quantity-button {
+    position: relative;
+    cursor: pointer;
+    border-left: 1px solid #eee;
+    width: 20px;
+    text-align: center;
+    color: #333;
+    font-size: 13px;
+    font-family: "Trebuchet MS", Helvetica, sans-serif !important;
+    line-height: 1.7;
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+    .quantity-button.quantity-up {
+        position: absolute;
+        height: 50%;
+        top: 0;
+        border-bottom: 1px solid #eee;
+        background-color: orangered;
+        color: white;
+    }
+
+    .quantity-button.quantity-down {
+        position: absolute;
+        bottom: -1px;
+        height: 50%;
+        background-color: orange;
+        color: white;
+    }
+
+.btn-tertiary {
+    color: #555;
+    padding: 0;
+    line-height: 40px;
+    width: 100%;
+    margin: auto;
+    display: block;
+    border: 2px solid #555;
+}
+
+    .btn-tertiary:hover, .btn-tertiary:focus {
+        color: #0088ff;
+        border-color: #0088ff;
+    }
+
+.botones {
+    width: 100%;
+    margin-top: 1em;
+}
+/* input file style */
+.input-file {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+    .input-file + .js-labelFile {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: 0 10px;
+        cursor: pointer;
+    }
+
+        .input-file + .js-labelFile .icon:before {
+            content: "\f093";
+        }
+
+        .input-file + .js-labelFile.has-file .icon:before {
+            content: "\f00c";
+            color: #5AAC7B;
+        }
+
+.title-horarios {
+    text-align: center;
+    color: #006e99;
+    padding-bottom: 0.8em;
+}
+
+.spinner {
+    display: none;
+}
+
+.mouse {
+    cursor: pointer;
+    text-align: center;
+}
+
+.icono {
+    text-align: center;
+}
+
+.totalcosto {
+    text-align: right;
+}
+
+.anotacion {
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 0.8em;
+    color: red !important;
+}
+
+.acuerdomodal {
+    color: dodgerblue !important;
+}
+
+    .acuerdomodal:hover {
+        cursor: pointer;
+    }
+
+.textocondiciones {
+    padding-left: 1em;
+    padding-right: 2em;
+}
+
+.titlemodal {
+    color: red;
+}
+
+.avisolibro {
+    color: deepskyblue;
+    font-size: 0.7em;
+}
+
+.is-inactive {
+    display: none !important;
+}
+
+.is-active {
+    display: block !important;
+    margin-bottom: 0.3em !important;
+}
+
+.form-check {
+    padding-bottom: 0.3em !important;
+}
+
+.cardvoucher {
+    box-shadow: 1.5px 1.5px 8px #b5b5b5;
+}
+
+    .cardvoucher:hover {
+        box-shadow: 1.5px 1.5px 8px #b5b5b5;
+        transform: scale(1.05);
+        transition-duration: 0.1s;
+    }

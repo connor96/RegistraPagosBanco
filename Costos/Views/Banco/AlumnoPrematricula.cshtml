@@ -1,0 +1,154 @@
+﻿@using CEntidades
+
+@{
+    ViewData["Title"] = "AlumnoPrematricula";
+
+    List<EN_PagoMatriculaA> _PagoMatriculaA = ViewBag.matriculaA;
+    EN_PagoMatriculaB _PagoMatriculaB = ViewBag.matriculaB;
+    int contador = 1;
+    bool estado=false;
+    bool estadoCaja = false;
+
+}
+
+@section Styles {
+    <link href="~/css/vouchersmain.css" rel="stylesheet" />
+}
+
+<div class="card col-10 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+
+        <div class="col-12 title-horarios">
+            <h3 class="titulo">Usted se registro en el siguiente curso y horario para el periodo de Abril</h3>
+        </div>
+
+        @foreach (var item in _PagoMatriculaA)
+        {
+            if (item.Estado)
+            {
+                estado = true;
+            }
+            if (item.CajaProcesado)
+            {
+                estadoCaja = true;
+            }
+        }
+
+
+        @if (estado && estadoCaja)
+        {
+                <div class="alert alert-success" role="alert">
+                    Se ha completado su proceso con exito, recoja su libro en horarios de oficina.
+                </div>
+
+        }
+        else if (estado==true && estadoCaja==false)
+        {
+            <div class="alert alert-warning" role="alert">
+                Pago exitoso, su matrícula se encuentra en proceso, espere para recoger su libro.
+            </div>
+        }else{
+
+            <div class="alert alert-danger" role="alert">
+                Para concluir su matricula realice el pago por Yape o BCP.
+            </div>
+
+        }
+
+        <div class="tabla-icpna">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Monto</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in _PagoMatriculaA)
+                    {
+                        <tr>
+                            <th scope="row">@contador</th>
+                            <td>@item.Descripcion</td>
+                            <td>@item.Monto</td>
+                        </tr>
+
+                        contador++;
+                        estado = item.Estado;
+                    }
+                    
+                    
+                </tbody>
+            </table>
+
+        </div>
+        <br />
+
+       
+
+
+
+        @* <div class="col-12 title-horarios">
+            <h3 class="titulo">Usted ya ha registrado su matrícula en el siguiente horario para este periodo de Marzo</h3>
+        </div> *@
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <i class="fa fa-check" aria-hidden="true"></i> Malla Curricular:
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                @_PagoMatriculaB.DesMallaCurricular
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <i class="fa fa-check" aria-hidden="true"></i> Frecuencia:
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                @_PagoMatriculaB.frecuencia
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <i class="fa fa-check" aria-hidden="true"></i> Modalidad:
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                @_PagoMatriculaB.modalidad
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <i class="fa fa-check" aria-hidden="true"></i> Nivel:
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                @_PagoMatriculaB.nivel
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <i class="fa fa-check" aria-hidden="true"></i> Curso:
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                @_PagoMatriculaB.DesCurso
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <i class="fa fa-check" aria-hidden="true"></i> Aula:
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                @_PagoMatriculaB.aula
+            </div>
+
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <i class="fa fa-check" aria-hidden="true"></i> Horario:
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                @_PagoMatriculaB.horario
+            </div>
+
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <i class="fa fa-check" aria-hidden="true"></i> Docente:
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                @_PagoMatriculaB.docente
+            </div>
+        </div>
+        
+        <br />
+
+
+    </div>
+</div>
+

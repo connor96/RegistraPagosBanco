@@ -1,0 +1,47 @@
+﻿@{
+    Layout = null;
+    List<CEntidades.EN_Conceptos> conceptos = new List<CEntidades.EN_Conceptos>();
+    conceptos = ViewBag.montoscargados;
+    int total = ViewBag.totales;
+
+    int contador = 0;
+}
+
+
+<div class="table-responsive">
+    <table class="table" id="mtable">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Concepto</th>
+                <th scope="col">Monto</th>
+                <th scope="col">Quitar</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in conceptos)
+            {
+                contador = contador + 1;
+                <tr>
+                    <th class="celdascentro" scope="row">@contador</th>
+                    <td class="celdascentro">@item.DesConcepto</td>
+                    <td class="celdascentro">s/@item.Monto.00</td>
+                    @if (item.Activo)
+                    {
+                        <td class="icono"> <a onclick="quitarelemento(@item.IdConcepto)" class="mouse"> <i class="fa fa-trash" aria-hidden="true"></i></a> </td>
+                    }
+                    else
+                    {
+                        <td class="icono"> <a class="mouse"> <i class="fa fa-check" aria-hidden="true"></i></a> </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+<br />
+<div class="totalcosto">
+    <h5>El total es: <span class="badge badge-danger">s/@total.00</span></h5>
+</div>

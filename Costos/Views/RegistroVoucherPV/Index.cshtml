@@ -1,0 +1,324 @@
+﻿@{
+    ViewData["Title"] = "Index";
+
+
+    CEntidades.EN_Voucher datosAlumno = new CEntidades.EN_Voucher();
+    datosAlumno = ViewBag.datosAlumnoVoucher;
+
+    List<CEntidades.EN_Conceptos> conceptos = new List<CEntidades.EN_Conceptos>();
+    conceptos = ViewBag.concep;
+
+    List<CEntidades.EN_Programacion> lprogramacion = new List<CEntidades.EN_Programacion>();
+    lprogramacion = ViewBag.lprog;
+
+    List<CEntidades.EN_PHoraria> lsedes = new List<CEntidades.EN_PHoraria>();
+    lsedes = ViewBag.sedes;
+
+    List<CEntidades.EN_Ciclo_Combo> lciclos = new List<CEntidades.EN_Ciclo_Combo>();
+    lciclos = ViewBag.ciclos;
+
+    List<CEntidades.EN_Conceptos> montos = new List<CEntidades.EN_Conceptos>();
+    montos = ViewBag.montoscargados;
+
+    int total = ViewBag.totales;
+
+    int contador = 0;
+
+}
+
+@section Styles{
+
+    <link href="~/css/voucherMP.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/css/gijgo.min.css" rel="stylesheet" />
+
+}
+
+
+<div class="card col-xl-8 col-lg-8 col-md-10 col-sm-10 col-10 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+        <div class="row">
+            <div class="col-12 title-horarios">
+                <h3>Registro de Pagos</h3>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Periodo:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <select class="form-control" id="varperiodo" onchange="validarEmail(event)">
+                            <option value="0" selected disabled>Seleccione una opción</option>
+                            @foreach (var item in lprogramacion)
+                            {
+                                <option value="@item.codProgramacion">@item.Descripcion</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Sede:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <select class="form-control" id="varsede" onchange="validarEmail(event)">
+                            <option value="0" selected disabled>Seleccione una opción</option>
+                            @foreach (var item in lsedes)
+                            {
+                                <option value="@item.idsede">@item.sede</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Email:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        @if (datosAlumno.Email != "0")
+                        {
+                            <input type="email" class="form-control" id="correopv" placeholder="Escriba un correo" value="@datosAlumno.Email">
+                            <div class="anotacion">Recuerda que puedes cambiar tu correo electrónico</div>
+                        }
+                        else
+                        {
+                            <input type="email" class="form-control" id="correopv" placeholder="Escriba un correo">
+                            <div class="anotacion">Recuerda que puedes cambiar tu correo electrónico</div>
+                        }
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Celular:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        @if (datosAlumno.Celular != "0")
+                        {
+                            <input type="text" class="form-control" id="numerocelularpv" placeholder="Escriba un Celular" maxlength="10" onkeypress="return validaNumericosoperacion(event)" value="@datosAlumno.Celular">
+                            <div class="anotacion">Recuerda que puedes cambiar tu número de celular</div>
+                        }
+                        else
+                        {
+                            <input type="text" class="form-control" id="numerocelularpv" placeholder="Escriba un Celular" maxlength="10" onkeypress="return validaNumericosoperacion(event)" required>
+                            <div class="anotacion">Recuerda que puedes cambiar tu número de celular</div>
+                        }
+
+
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Banco:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <select class="form-control" id="varbanco" onchange="validarEmail(event)">
+                            <option value="0" selected disabled>Seleccione una opción</option>
+                            <option value="BCP">BCP</option>
+                            <option value="INTERBANK">Interbank</option>
+
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Número de Operación:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <input type="number" class="form-control" id="numerooperacion" placeholder="Escriba el numero de trassacción" maxlength="10" onkeypress="return validaNumericosoperacion(event)">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Fecha de la Transacción:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <input id="datepicker" disabled />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Agregar conceptos:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <button type="button" class="botones btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                            <i class="fa fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+
+                @*<div class="form-group row">
+                <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Agregar libros:</label>
+                <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                <button type="button" class="botones btn btn-outline-primary" data-toggle="modal" data-target="#modalLibros">
+                <i class="fa fa-plus"></i> Agregar
+                </button>
+                </div>
+                </div>*@
+
+                <div class="form-group">
+                    <div id="tablemontos">
+                        <div class="table-responsive">
+                            <table class="table" id="mtable">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Concepto</th>
+                                        <th scope="col">Monto</th>
+                                        <th scope="col">Quitar</th>
+                                    </tr>
+                                    @foreach (var item in montos)
+                                    {
+                                        contador = contador + 1;
+                                        <tr>
+                                            <td scope="row">@contador</td>
+                                            <td>@item.DesConcepto</td>
+                                            <td>s/@item.Monto.00</td>
+                                            @if (item.Activo)
+                                            {
+                                                <td class="icono"> <a onclick="quitarelementopv(@item.IdConcepto)" class="mouse"> <i class="fa fa-trash" aria-hidden="true"></i></a> </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="icono"> <a class="mouse"> <i class="fa fa-check" aria-hidden="true"></i></a> </td>
+                                            }
+                                        </tr>
+                                    }
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                        <div class="totalcosto">
+                            <h5>El total es: <span class="badge badge-danger">s/@total.00</span></h5>
+                        </div>
+                        <p style="color:red">*Si este mes Ud. está estudiando y tiene deuda la mora se agregará después del 25 de cada mes.</p>
+
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Foto del Voucher:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <input type="file" name="file" id="file" class="input-file">
+                        <label for="file" class="btn btn-tertiary js-labelFile" id="labelbutton">
+                            <div id="spinner" class="spinner spinner-border spinner-border-sm text-success" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <i id="icono-check" class="icon fa fa-check"></i>
+                            <span class="js-fileName">Seleccione una imagen</span>
+                        </label>
+                        <!--<input type="file" id="photo" />
+                        <button onclick="uploadFile()">Upload Image</button>-->
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="row">
+
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <button type="button" class="botones btn btn-outline-primary" onclick="validarDatosPV()">
+                            Registrar <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        .
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Agregar Concepto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Concepto:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12 col-12">
+                        <select class="form-control" id="varconcepto" onchange="validardeuda()">
+                            <option value="0" selected disabled>Seleccione una opción</option>
+                            @foreach (var item in conceptos)
+                            {
+                                <option value="@item.IdConcepto">@item.DesConcepto</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                    Cerrar <i class="fa fa-window-close" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="btn btn-outline-primary" onclick="agregarpagovarios()">
+                    Agregar <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal libros -->
+@*<div class="modal fade" id="modalLibros" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Seleccione el curso del cual desea el libro</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Curso:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12 col-12">
+                            <select class="form-control" id="varlibro" onchange="validardeuda()">
+                                <option value="0" selected disabled>Seleccione una opción</option>
+                                @foreach (var item in lciclos)
+                                {
+                                    <option value="@item.CodCiclo">@item.DesCiclo</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                        Cerrar <i class="fa fa-window-close" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" onclick="agregarlibropv()">
+                        Agregar <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+
+
+@section Scripts{
+
+    <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/js/gijgo.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/js/messages/messages.es-es.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-storage.js"></script>
+
+    <script>
+        function _cabecera() {
+            return "@Url.Content("~")"; // Handle slashes, nulls, etc...
+        };
+    </script>
+    <script src="~/js/compressor.js"></script>
+
+
+
+    <script src="~/js/voucherPagos10.js"></script>
+
+}
+
+

@@ -1,0 +1,78 @@
+﻿@using CEntidades
+
+@{
+    ViewData["Title"] = "AlumnoDeuda";
+
+    List<EN_PagoMatriculaA> _PagoMatriculaA = ViewBag.matriculaA;
+   
+    int contador = 1;
+    bool estado = false;
+
+}
+
+
+@section Styles {
+    <link href="~/css/vouchersmain.css" rel="stylesheet" />
+}
+
+<div class="card col-10 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+
+        <div class="col-12 title-horarios">
+            <h3 class="titulo">Usted  ha registrado los siguientes conceptos para este periodo de Abril</h3>
+        </div>
+        <div class="tabla-icpna">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Monto</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in _PagoMatriculaA)
+                    {
+                        <tr>
+                            <th scope="row">@contador</th>
+                            <td>@item.Descripcion</td>
+                            <td>@item.Monto</td>
+                        </tr>
+
+                        contador++;
+                        estado = item.Estado;
+                    }
+
+
+                </tbody>
+            </table>
+
+        </div>
+        <br />
+
+        @if (estado)
+        {
+            <div class="alert alert-success" role="alert">
+                Usted ha cancelado su deuda
+            </div>
+
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">
+                Aun no ha cancelado la deuda
+            </div>
+        }
+
+
+
+        <br />
+
+
+    </div>
+</div>
+
+
+

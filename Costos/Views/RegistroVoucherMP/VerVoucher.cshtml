@@ -1,0 +1,32 @@
+﻿@{
+    Layout = null;
+    CEntidades.EN_Voucher_Pago vp = new CEntidades.EN_Voucher_Pago();
+    vp = ViewBag.dvoucher;
+}
+
+<div class="col-12">
+
+    <div class="form-group row col-12">
+        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Banco:</label>
+        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+            @vp.banco
+        </div>
+    </div>
+    <div class="form-group row col-12">
+        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Nro Operación:</label>
+        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+            @vp.nrooperacion
+        </div>
+    </div>
+    <div class="form-group row col-12">
+        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Nro Fecha de Pago:</label>
+        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+            @vp.fecha.ToShortDateString()
+        </div>
+    </div>
+
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <img src="@vp.url" class="img-fluid" alt="Responsive image" />
+    </div>
+
+</div>

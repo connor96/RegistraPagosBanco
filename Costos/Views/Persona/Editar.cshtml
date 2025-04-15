@@ -1,0 +1,693 @@
+﻿@model Recaudacion.BE.bePersonaUpdate
+
+@{
+    ViewData["Title"] = "Editar";
+
+    List<Recaudacion.BE.beTipoDireccion> lisTipoDireccion = new List<Recaudacion.BE.beTipoDireccion>();
+    List<Recaudacion.BE.beDepartamento> lisDepartamento = new List<Recaudacion.BE.beDepartamento>();
+    List<Recaudacion.BE.beProvincia> lisProvincia = new List<Recaudacion.BE.beProvincia>();
+    List<Recaudacion.BE.beOcupacion> lisOcupacion = new List<Recaudacion.BE.beOcupacion>();
+    List<Recaudacion.BE.beDistrito> lisDistrito = new List<Recaudacion.BE.beDistrito>();
+    List<Recaudacion.BE.beTipoVia> lisTipoVia = new List<Recaudacion.BE.beTipoVia>();
+
+    lisTipoDireccion = ViewBag.lisTipoDireccion;
+    lisDepartamento = ViewBag.lisDepartamento;
+    lisProvincia = ViewBag.lisProvincia;
+    //lisOcupacion = ViewBag.lisOcupacion;
+    lisDistrito = ViewBag.lisDistrito;
+    lisTipoVia = ViewBag.lisTipoVia;
+
+    ViewBag.Title = "Editar";
+
+}
+
+@section Styles{
+
+
+    <link href="~/css/vouchersmain.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+
+}
+
+
+@section Scripts {
+    @* <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/select2.js"></script>
+    @*<script src="~/Scripts/jquery.autocomplete.js"></script>*@
+    @* <script src="~/Scripts/jquery.form.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/bootstrap-datepicker-1.6.4-dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/bootstrap-datepicker-1.6.4-dist/locales/bootstrap-datepicker.es.min.js" charset="utf-8"></script> *@
+    <script>
+        $.ajaxSetup({
+            cache: false
+        });
+
+        $("#FNacimiento").datepicker({
+            format: "dd/mm/yyyy",
+            //startDate: "-70y",
+            //endDate: "-1y",
+            //minDate: new Date(1990, 1 - 1, 1),
+            // todayBtn: "linked",
+            changeMonth: true,
+            changeYear: true,
+            language: "es",
+             daysOfWeekHighlighted: "0,6",
+            // todayHighlight: true
+        });
+        var Departamento = document.getElementById('Departamento');
+        var Provincia = document.getElementById('Provincia');
+        var Distrito = document.getElementById('CodUbigeo');
+        var TipoDireccion = document.getElementById('TipoDireccion');
+
+
+        $(document).ready(function () {
+            // $(".select2_single").select2({
+            //     placeholder: "Seleccione...",
+            //     allowClear: true
+            // });
+            Departamento.onchange = function () {
+                CambiarProvincias();
+            };
+            Provincia.onchange = function () {
+                CambiarDistritos();
+            };
+            //TipoDireccion.onkeypress = function () {
+            //    Listalito(this);
+            //};
+            $("#btn-agregar-contacto").click(function () {
+                $("#modulocontenedor").html("<div class='loading-animate'></div>");
+                $("#modulocontenedor").load("@Url.Action("Create", "Contacto")");
+            });
+            $(".btndelete").click(function (e) {
+                var r = confirm("¿Está seguro de eliminar el registro?");
+                if (r == true) {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Contacto")',
+                        type: 'POST',
+                        data: { id: $(this).attr('id') },
+                        dataType: 'json',
+                        success: function (states) {
+                            if (states.intIdReturn > 0) {
+                                //alert(r.strMensaje);
+                                $("#modulocontenedor").html("<div class='loading-animate'></div>");
+                                $("#modulocontenedor").load("@Url.Action("Index", "Contacto")", function () {
+                                    $(document).ready(function () {
+                                        $("#btn-agregar-contacto").click(function () {
+                                            $("#modulocontenedor").html("<div class='loading-animate'></div>");
+                                            $("#modulocontenedor").load("@Url.Action("Create", "Contacto")");
+                                        });
+                                    });
+                                })
+                            }
+                            else {
+                                alert(states.strMensaje);
+                            }
+                        },
+                        error: function (ex) {
+                            Provincia.options.length = 0;
+                            alert('No se pudo Eliminar dato.' + ex.strMensaje);
+                        }
+                    });
+                }
+            });
+        });
+
+        function CambiarProvincias() {
+            Provincia.options.length = 0;
+            $.ajax({
+                url: '@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "AppProvincia" })',
+                type: 'GET',
+                data: { id: Departamento.value },
+                dataType: 'json',
+                success: function (states) {
+                    $.each(states, function (i, x) {
+                        var opt = document.createElement('option');
+                        opt.className += "f-t";
+                        opt.text = x.DesProvincia;
+                        opt.value = x.CodProvincia;
+                        Provincia.add(opt);
+                    });
+                    CambiarDistritos();
+                },
+                error: function (ex) {
+                    Provincia.options.length = 0;
+                    alert('No se pudo recuperar provincias.' + ex);
+                }
+            });
+        }
+
+        function CambiarDistritos() {
+            Distrito.options.length = 0;
+            $.ajax({
+                url: '@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "AppDistrito" })',
+                type: 'GET',
+                data: { idDep: Departamento.value, idProv: Provincia.value },
+                dataType: 'json',
+                success: function (states) {
+                    $.each(states, function (i, x) {
+                        var opt = document.createElement('option');
+                        opt.className += "f-t";
+                        opt.text = x.DesDistrito;
+                        opt.value = x.CodUbigeo;
+                        Distrito.add(opt);
+                    });
+                    //CambiarCiclo();
+                },
+                error: function (ex) {
+                    Distrito.options.length = 0;
+                    alert('No se pudo recuperar Distritos.' + ex);
+                }
+            });
+        }
+
+        function ListaVias(e) {
+            $.ajax({
+                url: '@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "AppNombreVia" })',
+                type: 'GET',
+                data: { id: e.value },
+                dataType: 'json',
+                success: function (states) {
+                    var vias = new Array();
+                    $.each(states, function (i, x) {
+                        vias[i] = x.DesNombreVia;
+                    });
+                    $('#NombreVia').autocomplete({
+                        source: vias
+                    });
+                },
+                error: function (ex) {
+                    Distrito.options.length = 0;
+                    alert('No se pudo recuperar Nombre de vias.' + ex);
+                }
+            });
+        }
+
+        function ListaDenominacion(e) {
+            $.ajax({
+                url: '@Url.RouteUrl("DefaultApi", new { httproute = "", controller = "AppDenominacionUrbana" })',
+                type: 'GET',
+                data: { id: e.value },
+                dataType: 'json',
+                success: function (states) {
+                    var urbanas = new Array();
+                    $.each(states, function (i, x) {
+                        urbanas[i] = x.DesDenominacionUrbana;
+                    });
+                    $('#DenominacionUrbana').autocomplete({
+                        source: urbanas
+                    });
+                },
+                error: function (ex) {
+                    Distrito.options.length = 0;
+                    alert('No se pudo recuperar Nombre de vias.' + ex);
+                }
+            });
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#frm-alumno").submit(function () {
+                var form = $(this);
+                //form.submit.attr("disable");
+                $('input[type="submit"]').attr('disabled', 'disabled');
+                if (form.validate()) {
+                    form.ajaxSubmit({
+                        dataType: 'JSON',
+                        type: 'POST',
+                        url: form.attr('action'),
+                        success: function (r) {
+                            alert(r.strMensaje)
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        }
+                    });
+                }
+                $('input[type="submit"]').removeAttr('disabled');
+                return false;
+            });
+
+
+            $.get('@Url.Action("Edit", "PersonaInstitucion")', function (result) {
+                $('#moduloProcedencia').html(result);
+            });
+
+            $.get('@Url.Action("Index", "Contacto")', function (result) {
+                $('#modulocontenedor').html(result);
+            });
+
+
+        });
+
+
+
+    </script>
+
+
+    <script>
+
+        //var ocupacion = document.getElementById('idOcupacion');
+        var CE = document.getElementById('IdCE');
+        var Carrera = document.getElementById('IdCarrera');
+
+        // $("#FNacimiento").datepicker({
+        //     format: "dd/mm/yyyy",
+        //     startDate: "-70y",
+        //     endDate: "-1y",
+        //     // todayBtn: "linked",
+        //     changeMonth: true,
+        //     changeYear: true,
+        //     language: "es",
+        //     daysOfWeekHighlighted: "0,6",
+        //     // todayHighlight: true
+        // });
+
+        $("#FVencimiento").datepicker({
+            format: "dd/mm/yyyy",
+            //startDate: "-70y",
+            //endDate: "-1y",
+            //minDate: new Date(1990, 1 - 1, 1),
+            // todayBtn: "linked",
+            changeMonth: true,
+            changeYear: true,
+            language: "es",
+            daysOfWeekHighlighted: "0,6",
+            // todayHighlight: true
+        });
+
+
+        // $(".select2").select2();
+
+        $(document).ready(function () {
+            
+            // Ocupacion.onchange = function () {
+            //     CambiarCE();
+            // };
+
+            // CE.onchange = function () {
+            //     CambiarCarrera();
+            // };
+            // OcultarCampo();
+        });
+
+        function cambiarOcupacion(e){
+
+            CambiarCE();
+        }
+
+        function cambiarCarrera(e) {
+
+            CambiarCarrera();
+        }
+
+
+        $("#frm-alumno-institucion").submit(function () {
+            var formcontacto = $(this);
+            //form.submit.attr("disable");
+            $('input[type="submit"]').attr('disabled', 'disabled');
+            if (formcontacto.validate().form()) {
+                formcontacto.ajaxSubmit({
+                    dataType: 'JSON',
+                    type: 'POST',
+                    url: formcontacto.attr('action'),
+                    success: function (r) {
+                        //if (r.intIdReturn > 0) {
+                        alert(r.strMensaje);
+                        //}
+                        //else {
+                        //    alert(r.strMensaje);
+                        //}
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    }
+                });
+            }
+            $('input[type="submit"]').removeAttr('disabled');
+            return false;
+        });
+
+        function OcultarCampo() {
+            var ocupacion = document.getElementById('idOcupacion');
+            var ListaOpciones = "01236789";
+            if (ListaOpciones.indexOf(ocupacion.value) < 0) {
+                $(".opcional").show();
+            }
+            else {
+                $(".opcional").hide();
+            }
+
+            var ListaOpciones2 = "06789";
+            if (ListaOpciones2.indexOf(ocupacion.value) < 0) {
+                $(".opcional2").show();
+            }
+            else {
+                $(".opcional2").hide();
+            }
+
+
+        }
+
+        function CambiarCE() {
+
+            var ocupacion = document.getElementById('idOcupacion');
+            var CE = document.getElementById('IdCE');
+
+            OcultarCampo();
+            CE.options.length = 0;
+            var opt = document.createElement('option');
+            opt.text = "Buscando...";
+            opt.value = "";
+            CE.add(opt);
+            $.ajax({
+                url: '@Url.ActionLink("Get", "AppCE")',
+                type: 'GET',
+                data: { id: ocupacion.value },
+                dataType: 'json',
+                success: function (states) {
+
+                    console.log(states);
+                    CE.options.length = 0;
+                    $.each(states, function (i, x) {
+                        var opt = document.createElement('option');
+                        opt.text = x.nombreCE;
+                        opt.value = x.idCE;
+                        CE.add(opt);
+                    });
+                    CambiarCarrera();
+                },
+                error: function (ex) {
+                    CE.options.length = 0;
+                    alert('No se pudo recuperar centros educativos.' + ex);
+                }
+            });
+        }
+
+        function CambiarCarrera() {
+            var CE = document.getElementById('IdCE');
+            var Carrera = document.getElementById('IdCarrera');
+            Carrera.options.length = 0;
+            var opt = document.createElement('option');
+            opt.text = "Buscando...";
+            opt.value = "";
+            Carrera.add(opt);
+            $.ajax({
+                url: '@Url.ActionLink("Get", "AppCECarrera")',
+                type: 'GET',
+                data: { id: CE.value },
+                dataType: 'json',
+                success: function (states) {
+                    Carrera.options.length = 0;
+                    $.each(states, function (i, x) {
+                        var opt = document.createElement('option');
+                        opt.text = x.desCarrera;
+                        opt.value = x.idCarrera;
+                        Carrera.add(opt);
+                    });
+                },
+                error: function (ex) {
+                    Carrera.options.length = 0;
+                    alert('No se pudo recuperar carreras.' + ex);
+                }
+            });
+        }
+
+
+
+
+    </script>
+
+}
+
+
+
+
+<div class="card col-10 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+
+    <div >
+        <h3 class="cursive-font">Editar datos</h3>
+        <ul class="nav nav-tabs">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" href="#tab_content1" role="tab" id="home-tab" data-toggle="tab" aria-expanded="true" class="active" selected="true">Alumno</a>
+                </li>
+                <li class="nav-item" role="presentation" id="GetReviewsLink">
+                    <a class="nav-link"  href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Procedencia</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link"  href="#tab_content3" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Apoderado</a>
+                </li>
+        </ul>
+        <div id="myTabContent" class="tab-content container" style="padding-left:15px;padding-right:15px">
+            <div role="tabpanel" class="tab-pane fade in active show" id="tab_content1" aria-labelledby="home-tab">
+                @*@using (Html.BeginForm())*@
+                @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data", @id = "frm-alumno" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                @Html.Label(expression:"", labelText: "Apellidos y nombres", htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control" name="Nombres" value="@Model.ApellidoPaterno @Model.ApellidoMaterno @Model.Nombres1 @Model.Nombres2" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="col-md-6">
+                                <div class="row form-group">
+                                    @Html.LabelFor(model => model.IdTipoDocumento, htmlAttributes: new { @class = "control-label col-md-12" })
+                                    <div class="col-md-12">
+                                        @Html.EditorFor(model => model.IdTipoDocumento, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.IdTipoDocumento, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="col-md-6">
+                            <div class="row form-group">
+                                @Html.LabelFor(model => model.DNI, htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.DNI, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.DNI, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row form-group">
+                                @Html.LabelFor(model => model.Sexo, htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @*@Html.EditorFor(model => model.Sexo, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    <select name="Sexo" id="Sexo" class="form-control" required>
+                                       @*  <option value="F" @((Model.Sexo == "F") ? "selected" : "")>FEMENINO</option>
+                                        <option value="M" @((Model.Sexo == "M") ? "selected" : "")>MASCULINO</option> *@
+                                        
+
+                                        @if (Model.Sexo=="F")
+                                            {
+                                                <option value="F" selected>FEMENINO</option>
+                                                <option value="M">MASCULINO</option>
+                                            }else
+                                            {
+                                            <option value="F">FEMENINO</option>
+                                                <option value="M" selected>MASCULINO</option>
+                                            }
+
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.Sexo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row form-group">
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row form-group">
+                                    @Html.LabelFor(model => model.FNacimiento, htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.FNacimiento, new { htmlAttributes = new { @class = "form-control", @type = "text", @placeholder = "dd/mm/yyyy" } })
+                                    @Html.ValidationMessageFor(model => model.FNacimiento, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row form-group">
+                                @Html.Label(expression: "", labelText: "Departamento", htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @*@Html.EditorFor(model => model.CodUbigeo, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    <select name="Departamento" id="Departamento" class="form-control" required>
+                                        @foreach (var item in lisDepartamento)
+                                        {
+                                            if (item.CodDepartamento == Model.itmDistrito.CodDepartamento)
+                                            {
+                                                <option value="@item.CodDepartamento" selected>@item.DesDepartamento.ToUpper()</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.CodDepartamento">@item.DesDepartamento.ToUpper()</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span class="text-danger field-validation-valid" data-valmsg-replace="true" data-valmsg-for="Departamento"></span>
+                                    @*@Html.ValidationMessageFor(model => model.CodUbigeo, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row form-group">
+                                @Html.Label(expression: "", labelText: "Provincia", htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @*@Html.EditorFor(model => model.CodUbigeo, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    <select name="Provincia" id="Provincia" class="form-control" required>
+                                        @foreach (var item in lisProvincia)
+                                        {
+                                            if (item.CodProvincia == Model.itmDistrito.CodProvincia)
+                                            {
+                                                <option value="@item.CodProvincia" selected>@item.DesProvincia.ToUpper()</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.CodProvincia">@item.DesProvincia.ToUpper()</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span class="text-danger field-validation-valid" data-valmsg-replace="true" data-valmsg-for="Provincia"></span>
+                                    @*@Html.ValidationMessageFor(model => model.CodUbigeo, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row form-group">
+                                @Html.Label(expression: "", labelText: "Distrito", htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @*@Html.EditorFor(model => model.CodUbigeo, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    <select name="CodUbigeo" id="CodUbigeo" class="form-control" required>
+                                        @foreach (var item in lisDistrito)
+                                        {
+                                            if (item.CodUbigeo == Model.CodUbigeo)
+                                            {
+                                                <option value="@item.CodUbigeo" selected>@item.DesDistrito.ToUpper()</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.CodUbigeo">@item.DesDistrito.ToUpper()</option>
+                                            }
+                                        }
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.CodUbigeo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row form-group">
+                                @Html.LabelFor(model => model.IdTipoVia, htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @*@Html.EditorFor(model => model.IdTipoVia, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    <select name="IdTipoVia" id="IdTipoVia" class="form-control" required>
+                                        @foreach (var item in lisTipoVia)
+                                        {
+                                            if (item.IdTipoVia == Model.IdTipoVia)
+                                            {
+                                                <option value="@item.IdTipoVia" selected>@item.ResTipoVia</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.IdTipoVia">@item.ResTipoVia</option>
+                                            }
+                                        }
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.IdTipoVia, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row form-group">
+                                @Html.LabelFor(model => model.NombreVia, htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @*<div class="input-group" style="margin:20px 0px;">*@
+                                    @Html.EditorFor(model => model.NombreVia, new { htmlAttributes = new { @class = "form-control", @onkeyUp = "return ListaVias(this);" } })
+                                    @*<span class="input-group-btn">
+                                                <button id="open" class="btn btn-default" type="button"><span class="caret"></span></button>
+                                            </span>
+                                        </div>*@
+                                    @Html.ValidationMessageFor(model => model.NombreVia, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row form-group">
+                                @Html.LabelFor(model => model.TipoDireccion, htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @*@Html.EditorFor(model => model.TipoDireccion, new { htmlAttributes = new { @class = "form-control", @placeholder = "enter state" } })*@
+                                    <select name="TipoDireccion" id="TipoDireccion" class="form-control" required>
+                                        @foreach (var item in lisTipoDireccion)
+                                        {
+                                            if (item.IdTipoDireccion == Convert.ToInt16(Model.TipoDireccion))
+                                            {
+                                                <option value="@item.IdTipoDireccion" selected>@item.DesTipoDireccion</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.IdTipoDireccion">@item.DesTipoDireccion</option>
+                                            }
+                                        }
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.TipoDireccion, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row form-group">
+                                @Html.LabelFor(model => model.Numero, htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.Numero, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Numero, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row form-group">
+                                @Html.LabelFor(model => model.DenominacionUrbana, htmlAttributes: new { @class = "control-label col-md-12" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.DenominacionUrbana, new { htmlAttributes = new { @class = "form-control", @onkeyUp = "return ListaDenominacion(this);" } })
+                                    @Html.ValidationMessageFor(model => model.DenominacionUrbana, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <a class="btn btn-outline btn-primary" href="@Url.Action("Index", "Home")"><samp class="glyphicon glyphicon-chevron-left"></samp> Retornar sin guardar</a>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="submit" value="Guardar información" class="btn btn-primary btn-block" />
+                        </div>
+                    </div>
+                }
+            </div>
+            <div role="tabpanel" class="row tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+                <div id="moduloProcedencia">
+                       @*  @await Html.PartialAsync("../PersonaInstitucion/Edit.cshtml"); *@
+                       @* @Html.ActionLink("Edit", "PersonaInstitucion")  *@
+                        @* @await Html.PartialAsync("/Views/PersonaInstitucion/Edit.cshtml") *@
+
+                      
+                </div>
+            </div>
+            <div role="tabpanel" class="row tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+                <div id="modulocontenedor">
+                    @Html.ActionLink("index", "Contacto")
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+
+</div>

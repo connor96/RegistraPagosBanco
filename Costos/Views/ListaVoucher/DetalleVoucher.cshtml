@@ -1,0 +1,120 @@
+﻿@{
+    Layout = null;
+    CEntidades.EN_Voucher_Pagado vpagado = new CEntidades.EN_Voucher_Pagado();
+    vpagado = ViewBag.voucher;
+
+}
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLongTitle">RESUMEN DE PAGO</h5>
+</div>
+<div class="modal-body">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+        <div class="form-group row especial">
+            <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> DNI:</label>
+            <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12 texto">
+                @vpagado.DNI
+            </div>
+        </div>
+        <div class="form-group row especial">
+            <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Alumno:</label>
+            <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12 texto">
+                @vpagado.Fullname
+            </div>
+        </div>
+
+        <div class="form-group row especial">
+            <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Conceptos:</label>
+            <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12 texto">
+
+                @if (vpagado.conceptos.Count() == 1)
+                {
+                    @foreach (var item in vpagado.conceptos)
+                    {
+                        <div>@item.DesConcepto : S/@item.Monto.00 </div>
+                    }
+                }
+                else
+                {
+                    <ul>
+                        @foreach (var item in vpagado.conceptos)
+                        {
+                            <li>@item.DesConcepto : s/@item.Monto.00</li>
+                        }
+
+                    </ul>
+                }
+            </div>
+        </div>
+
+        @if (vpagado.cursosregistrados.Count() == 1)
+        {
+            <div class="form-group row especial">
+                <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Curso:</label>
+                <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12 texto">
+
+                    @foreach (var item in vpagado.cursosregistrados)
+                    {
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Frecuecia: @item.Frecuencia</li>
+                            <li class="list-group-item">Curso: @item.DesCurso</li>
+                            <li class="list-group-item">Docente: @item.Docente</li>
+                            <li class="list-group-item">Horario: @item.Horario</li>
+                            <li class="list-group-item">Aula: @item.aula</li>
+                        </ul>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (vpagado.cursosregistrados.Count() > 1)
+        {
+            @foreach (var item in vpagado.cursosregistrados)
+            {
+                <div class="form-group row especial">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Curso @item.DesCurso:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12 texto">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Frecuecia: @item.Frecuencia</li>
+                            <li class="list-group-item">Curso: @item.DesCurso</li>
+                            <li class="list-group-item">Docente: @item.Docente</li>
+                            <li class="list-group-item">Horario: @item.Horario</li>
+                            <li class="list-group-item">Horario: @item.aula</li>
+                        </ul>
+                    </div>
+                </div>
+            }
+
+        }
+
+        @foreach (var item in vpagado.vouchersregistrados)
+        {
+            <div class="form-group row especial">
+                <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label"><i class="fa fa-check" aria-hidden="true"></i> Voucher @item.nrooperacion</label>
+                <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12 texto">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Banco: @item.banco</li>
+                        <li class="list-group-item">Fecha: @item.fecha.ToShortDateString()</li>
+                        <li class="list-group-item"><img src="@item.url" class="img-fluid" alt="Responsive image" /></li>
+                    </ul>
+                </div>
+            </div>
+        }
+
+
+
+
+
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+        Cerrar <i class="fa fa-window-close" aria-hidden="true"></i>
+    </button>
+    @* <button type="button" class="btn btn-outline-primary" onclick="downloadReportMP(@vpagado.IdTransaccion)">
+        Descargar <i class="fa fa-download"></i>
+    </button> *@
+</div>
+
+

@@ -1,0 +1,352 @@
+﻿@{
+    ViewData["Title"] = "Index";
+
+    CEntidades.Login log = new CEntidades.Login();
+    log = ViewBag.login;
+    string idPersona = ViewBag.iPersona;
+
+    string estado = ViewBag.tipoAlumno;
+
+
+}
+
+@section Styles{
+    @if (estado == "NNN" || estado == "EUN")
+    {
+        <link href="~/css/dashStylesNinios.css" rel="stylesheet" />
+    }
+    else
+    {
+
+        <link href="~/css/dashStyles.css" rel="stylesheet" />
+    }
+}
+
+@if (estado == "NNN" || estado == "EUN")
+{
+
+    <div class="card col-10 alumno">
+        <div class="card-body card-alumno">
+            <div class="row">
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-4 col-4">
+
+                    <img src="~/images/icons8-student-64.png" class="imagen" alt="Responsive image" />
+
+
+                </div>
+                <div class="text-alumno col-xl-10 col-lg-10 col-md-10 col-sm-8 col-8">
+                    Bienvenido, @log.fullname <br />
+                    DNI, @log.dni
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card col-10 alumno opciones-alumno">
+        <div class="card-body card-alumno">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="row">
+                        <!--<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="btn btn-outline-danger">
+                                <i class="fa fa-user"></i> Actualizar Datos
+                            </button>
+                        </div>-->
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="btn btn-outline-danger" onclick="cpago()">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                                Consulta tu Pago
+                            </button>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="btn btn-outline-danger" onclick="lvoucher()">
+                                <i class="fa fa-list-alt"></i>
+                                Lista de Pagos
+                            </button>
+                        </div>
+
+
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+
+                            <a class="btn btn-outline-success" href="@Url.Action("Index","Banco")"><i class="fa fa-sticky-note-o" aria-hidden="true"></i>&nbsp Registra tu matrícula (BCP Pensiones y Matriculas - Yape)</a>
+
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+
+                            <button type="button" class="btn btn-outline-success" onclick="vmatriculaninios()">
+                                <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+                                Registra tu matricula (BCP pagos Varios e Interbank)
+                            </button>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="btn btn-outline-success" onclick="vpagosvarios()">
+                                <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+                                Otros Pagos
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                @*<div class="grafico col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+            <canvas id="myChart" width="400" height="400"></canvas>
+            </div>*@
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card col-10 alumno opciones-alumno">
+        <div class="card-body card-alumno">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="row">
+
+
+                        <div class="col-12">
+                            <h3>Niveles por edad</h3>
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#home">
+                                        <p style="margin-bottom:0.1em !important; text-align:center">
+                                            Initial:
+                                        </p>
+                                        <p style="font-weight:bold; margin-bottom:0.1em !important; text-align:center">
+                                            3 - 5 años
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#menu1">
+                                        <p style="margin-bottom:0.1em !important; text-align:center">
+                                            Stage 1:
+                                        </p>
+                                        <p style="font-weight:bold; margin-bottom:0.1em !important; text-align:center">
+                                            6-8 años
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#menu2">
+                                        <p style="margin-bottom:0.1em !important; text-align:center">
+                                            Stage 2:
+                                        </p>
+                                        <p style="font-weight:bold; margin-bottom:0.1em !important; text-align:center">
+                                            9-13 años
+                                        </p>
+
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div id="home" class="container tab-pane active">
+                                    <div class="row">
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 inicio-items">
+                                            <div class="card cursos">
+                                                <div class="card-body">
+                                                    <h5 class="card-title title-card">Kiddies (3 años)</h5>
+                                                    <p class="card-text">KSS01 - KSS06</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 inicio-items">
+                                            <div class="card cursos">
+                                                <div class="card-body">
+                                                    <h5 class="card-title title-card">Pre Kinder (4 años)</h5>
+                                                    <p class="card-text">PKN01S - PKN06S</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 inicio-items">
+                                            <div class="card cursos">
+                                                <div class="card-body">
+                                                    <h5 class="card-title title-card">Kinder (5 años)</h5>
+                                                    <p class="card-text">KN0AS - KN0DS</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div id="menu1" class="container tab-pane fade">
+                                    <div class="row">
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 inicio-items">
+                                            <div class="card cursos">
+                                                <div class="card-body">
+                                                    <h5 class="card-title title-card">Kids</h5>
+                                                    <p class="card-text">K01S - K06S</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 inicio-items">
+                                            <div class="card cursos">
+                                                <div class="card-body">
+                                                    <h5 class="card-title title-card">Children</h5>
+                                                    <p class="card-text">C01S - C06S</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 inicio-items">
+                                            <div class="card cursos">
+                                                <div class="card-body">
+                                                    <h5 class="card-title title-card">Young Learners</h5>
+                                                    <p class="card-text">Y01S - Y06S</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div id="menu2" class="container tab-pane fade">
+                                    <div class="row">
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 inicio-items">
+                                            <div class="card cursos">
+                                                <div class="card-body">
+                                                    <h5 class="card-title title-card">Juniors</h5>
+                                                    <p class="card-text">JR01S - JR08S</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 inicio-items">
+                                            <div class="card cursos">
+                                                <div class="card-body">
+                                                    <h5 class="card-title title-card">Pre-teens</h5>
+                                                    <p class="card-text">PT01S - PT06S</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 inicio-items">
+                                            <div class="card cursos">
+                                                <div class="card-body">
+                                                    <h5 class="card-title title-card">Teens</h5>
+                                                    <p class="card-text">T01S - T06S</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                @*<div class="grafico col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+            <canvas id="myChart" width="400" height="400"></canvas>
+            </div>*@
+
+
+            </div>
+            .
+        </div>
+    </div>
+
+
+
+}
+else
+{
+    <div class="card col-10 alumno">
+        <div class="card-body card-alumno">
+            <div class="row">
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-4 col-4">
+                    <img src="~/images/icons8-student-64.png" class="imagen" alt="Responsive image" />
+                </div>
+                <div class="text-alumno col-xl-10 col-lg-10 col-md-10 col-sm-8 col-8">
+                    Bienvenido, @log.fullname <br />
+                    DNI, @log.dni
+                </div>
+            </div>
+            .
+        </div>
+    </div>
+
+
+    <div class="card col-10 alumno opciones-alumno">
+        <div class="card-body card-alumno">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="row">
+                        <!--<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="btn btn-outline-danger">
+                                <i class="fa fa-user"></i> Actualizar Datos
+                            </button>
+                        </div>-->
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="btn btn-outline-danger" onclick="cpago()">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                                Consulta tu Pago
+                            </button>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="btn btn-outline-danger" onclick="lvoucher()">
+                                <i class="fa fa-list-alt"></i>
+                                Listar de Pagos
+                            </button>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+
+                            <a class="btn btn-outline-success" href="@Url.Action("Index","Banco")"><i class="fa fa-sticky-note-o" aria-hidden="true"></i>&nbsp Registra tu matrícula (BCP Pensiones y Matriculas - Yape)</a>
+
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="btn btn-outline-success" onclick="vmatricula()">
+                                <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+                                Registra tu matricula (BCP pagos Varios e Interbank)
+                            </button>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="btn btn-outline-success" onclick="vpagosvarios()">
+                                <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+                                Otros Pagos
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                @*<div class="grafico col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+            <canvas id="myChart" width="400" height="400"></canvas>
+            </div>*@
+
+
+            </div>
+            .
+        </div>
+    </div>
+
+
+}
+
+
+
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+    <script>
+        function _cabecera() {
+            return "@Url.Content("~")"; // Handle slashes, nulls, etc...
+        };
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <script src="~/js/dashjs.js"></script>
+
+}
+

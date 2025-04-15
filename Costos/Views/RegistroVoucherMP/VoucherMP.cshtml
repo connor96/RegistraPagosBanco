@@ -1,0 +1,736 @@
+﻿@{
+    ViewData["Title"] = "VoucherMP";
+
+    CEntidades.EN_Voucher datosAlumno = new CEntidades.EN_Voucher();
+    datosAlumno = ViewBag.datosAlumnoVoucher;
+
+    CEntidades.EN_Alumno alumno2 = new CEntidades.EN_Alumno();
+    alumno2 = ViewBag.alumno;
+
+
+    CEntidades.EN_CEmergencia emergencia=new CEntidades.EN_CEmergencia();
+    emergencia = ViewBag.datosEmergencia;
+
+    List<CEntidades.EN_Conceptos> conceptos = new List<CEntidades.EN_Conceptos>();
+    conceptos = ViewBag.datosConceptos;
+
+    List<CEntidades.EN_Conceptos> montos = new List<CEntidades.EN_Conceptos>();
+    montos = ViewBag.datosMontos;
+
+    List<CEntidades.EN_Ciclo_Combo> lciclos = new List<CEntidades.EN_Ciclo_Combo>();
+    lciclos = ViewBag.ciclos;
+
+    List<CEntidades.EN_PHoraria> sedesICPNA = new List<CEntidades.EN_PHoraria>();
+    sedesICPNA = ViewBag.sedes;
+
+    List<string> _lContactos= new List<string>();
+    _lContactos = ViewBag.listaContactos;
+
+    int contador = 0;
+
+    int total = ViewBag.sumatotal;
+
+    var sessionName = new Byte[20];
+    bool estado = Context.Session.TryGetValue("tipoAlumno", out sessionName);
+
+    string result = "";
+    if (estado)
+    {
+        result = System.Text.Encoding.UTF8.GetString(sessionName);
+
+    }
+
+    string cursoactual = ViewBag.cursoactual;
+
+
+
+}
+
+@section Styles{
+
+    @if (result == "NNN" || result == "EUN")
+    {
+        <link href="~/css/voucherMPninios.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/css/gijgo.min.css" rel="stylesheet" />
+    }
+    else
+    {
+        <link href="~/css/voucherMP.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/css/gijgo.min.css" rel="stylesheet" />
+    }
+
+
+
+}
+
+
+<div class="card col-xl-8 col-lg-8 col-md-10 col-sm-10 col-10 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+        <div class="row">
+            <div class="col-12 title-horarios">
+                <h3>Registro de Pagos Abril - Paso 2 de 2 </h3>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+                @if (result == "NNN" || result == "EUN")
+                {
+
+                    <div class="form-group">
+                        <div id="tablemontos">
+                            <div class="table-responsive">
+                                <table class="table" id="mtable">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Concepto</th>
+                                            <th scope="col">Monto</th>
+                                        </tr>
+                                        @foreach (var item in montos)
+                                        {
+                                            contador = contador + 1;
+                                            <tr>
+                                                <td scope="row">@contador</td>
+                                                <td>@item.DesConcepto</td>
+                                                <td>s/@item.Monto.00</td>
+                                            </tr>
+                                        }
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                            <div class="totalcosto">
+                                <h5>El total es: <span class="badge badge-danger">s/@total.00</span></h5>
+                            </div>
+
+                        </div>
+                    </div>
+
+                }
+                else
+                {
+
+
+
+                    <div class="form-group">
+                        <div id="tablemontos">
+                            <div class="table-responsive">
+                                <table class="table" id="mtable">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Concepto</th>
+                                            <th scope="col">Monto</th>
+                                            <th scope="col">Quitar</th>
+                                        </tr>
+                                        @foreach (var item in montos)
+                                        {
+                                            contador = contador + 1;
+                                            <tr>
+                                                <td scope="row">@contador</td>
+                                                <td>@item.DesConcepto</td>
+                                                <td>s/@item.Monto.00</td>
+                                                @if (item.Activo)
+                                                {
+                                                    <td class="icono"> <a onclick="quitarelemento(@item.IdConcepto)" class="mouse"> <i class="fa fa-trash" aria-hidden="true"></i></a> </td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="icono"> <a class="mouse"> <i class="fa fa-check" aria-hidden="true"></i></a> </td>
+                                                }
+                                            </tr>
+                                        }
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                            <div class="totalcosto">
+                                <h5>El total es: <span class="badge badge-danger">s/@total.00</span></h5>
+                            </div>
+                            <p style="color:red">*Si este mes Ud. está estudiando y tiene deuda la mora se agregará después del 25 de cada mes.</p>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Agregar conceptos:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            <button type="button" class="botones btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                <i class="fa fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        
+                        <div class="col-12">
+                            <p class="avisolibro">*El libro virtual lo encontrará en su intranet.</p>
+                        </div>
+                    </div>
+
+                }
+
+                @if (result == "NNN" || result == "EUN")
+                {
+
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Email:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            @if (datosAlumno.Email != "0")
+                            {
+                                <input type="email" class="form-control" id="correo" placeholder="Escriba un correo" value="@datosAlumno.Email">
+                                <div class="anotacion">Recuerda que debes escribir el correo electrónico del alumno</div>
+                            }
+                            else
+                            {
+                                <input type="email" class="form-control" id="correo" placeholder="Escriba un correo">
+                                <div class="anotacion">Recuerda que debes escribir el correo electrónico del alumno</div>
+                            }
+
+                            @if (result == "NNN")
+                            {
+
+                                @switch (cursoactual)
+                                {
+                                    case "K01S":
+                                    case "K02S":
+                                    case "K03S":
+                                    case "K04S":
+                                    case "K05S":
+                                    case "K06S":
+                                    case "C01S":
+                                    case "C02S":
+                                    case "C03S":
+                                    case "C04S":
+                                    case "C05S":
+                                    case "C06S":
+                                    case "Y01S":
+                                    case "Y02S":
+                                    case "Y03S":
+                                    case "Y04S":
+                                    case "Y05S":
+                                    case "Y06S":
+                                    case "JR01S":
+                                    case "JR02S":
+                                    case "JR03S":
+                                    case "JR04S":
+                                    case "JR05S":
+                                    case "JR06S":
+                                    case "JR07S":
+                                    case "JR08S":
+                                    case "PT01S":
+                                    case "PT02S":
+                                    case "PT03S":
+                                    case "PT04S":
+                                    case "PT05S":
+                                    case "PT06S":
+                                    case "T01S":
+                                    case "T02S":
+                                    case "T03S":
+                                    case "T04S":
+                                    case "T05S":
+                                    case "T06S":
+                                    case "K01-2D":
+                                    case "JR01-02D":
+                                    case "K03-4D":
+                                    case "JR03-04D":
+                                    case "C01-2D":
+                                        <div class="anotacion">* El código de acceso a sus libros virtuales lo encontrará en su intranet.</div>
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Celular:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            @if (datosAlumno.Celular != "0")
+                            {
+                                <input type="text" class="form-control" id="numerocelular" placeholder="Escriba un Celular" maxlength="10" onkeypress="return validaNumericosoperacion(event)" value="@datosAlumno.Celular">
+                                <div class="anotacion">Recuerda que puedes cambiar tu número de celular</div>
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" id="numerocelular" placeholder="Escriba un Celular" maxlength="10" onkeypress="return validaNumericosoperacion(event)" required>
+                                <div class="anotacion">Recuerda que puedes cambiar tu número de celular</div>
+                            }
+
+
+                        </div>
+                    </div>
+
+
+
+
+
+                }
+                else
+                {
+
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Email:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            @if (datosAlumno.Email != "0")
+                            {
+                                <input type="email" class="form-control" id="correo" placeholder="Escriba un correo" value="@datosAlumno.Email">
+                                <div class="anotacion">Recuerda que puedes cambiar tu correo electrónico</div>
+                            }
+                            else
+                            {
+                                <input type="email" class="form-control" id="correo" placeholder="Escriba un correo">
+                                <div class="anotacion">Recuerda que puedes cambiar tu correo electrónico</div>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Celular:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            @if (datosAlumno.Celular != "0")
+                            {
+                                <input type="text" class="form-control" id="numerocelular" placeholder="Escriba un Celular" maxlength="10" onkeypress="return validaNumericosoperacion(event)" value="@datosAlumno.Celular">
+                                <div class="anotacion">Recuerda que puedes cambiar tu número de celular</div>
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" id="numerocelular" placeholder="Escriba un Celular" maxlength="10" onkeypress="return validaNumericosoperacion(event)" required>
+                                <div class="anotacion">Recuerda que puedes cambiar tu número de celular</div>
+                            }
+
+
+                        </div>
+                    </div>
+
+                }
+
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Sede donde recogera su libro:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <select class="form-control" id="varsedeicpna">
+                            <option selected disabled>Seleccione una opción</option>
+                            @foreach (var item in sedesICPNA)
+                            {
+                                <option value="@item.idsede">@item.sede</option>
+                            }
+                        </select>
+                        <div class="anotacion">Recuerda que debes seleccionar la sede en la cual recogeras tu libro</div>
+                    </div>
+                </div>
+
+
+                @if (emergencia!=null)
+                {
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Seleccione su contacto de emergencia:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            <select class="form-control" id="contactoemergencia">
+                                <option disabled>Seleccione una opción</option>
+                                @foreach (var item in _lContactos)
+                                {
+                                    if (item==emergencia.idContactoEmergencia)
+                                    {
+                                        <option value="@item" selected>@item</option>
+                                    }
+                                    else{
+                                        <option value="@item">@item</option>
+                                    }
+                                }
+
+                            </select>
+                            <div class="anotacion">Recuerda que debes seleccionar la sede en la cual recogeras tu libro</div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Celular Emergencia:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            <input type="text" class="form-control" id="celularemergencia" placeholder="Escriba un Celular" maxlength="10" onkeypress="return validaNumericosoperacion(event)" value="@emergencia.numeroEmergencia">
+                            <div class="anotacion">Recuerda que debes actualizar tu contacto de emergencia</div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Seleccione su contacto de emergencia:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            <select class="form-control" id="contactoemergencia">
+                                <option selected disabled>Seleccione una opción</option>
+                                <option value="padre">Padre</option>
+                                <option value="madre">Madre</option>
+                                <option value="apoderado">Apoderado(a)</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                            <div class="anotacion">Recuerda que debes actualizar tu contacto de emergencia</div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Celular Emergencia:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            <input type="text" class="form-control" id="celularemergencia" placeholder="Escriba un Celular" maxlength="10" onkeypress="return validaNumericosoperacion(event)">
+                            <div class="anotacion">Recuerda que debes actualizar tu numero contacto de Emergencia</div>
+                        </div>
+                    </div>
+                }
+
+                
+
+
+                @if (result == "NNN" || result == "EUN")
+                {
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Agregar voucher:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            <button type="button" id="boton-agregar-voucher" class="botones btn btn-outline-primary" data-toggle="modal" data-target="#modalVoucher">
+                                <i class="fa fa-plus"></i> Agregar
+                            </button>
+                            <div class="anotacion">*Suba una foto o captura del voucher.</div>
+                        </div>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group row">
+                        <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Agregar voucher:</label>
+                        <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                            <button type="button" id="boton-agregar-voucher" class="botones btn btn-outline-primary" data-toggle="modal" data-target="#modalVoucher">
+                                <i class="fa fa-plus"></i> Agregar
+                            </button>
+                        </div>
+
+                    </div>
+                }
+
+                <div class="form-group row">
+                    <div id="voucheragregado" class="col-12">
+
+                        <!-- ------------------------------------------------------------------ -->
+                        @*<div class="col-12">
+                        <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="card cardvoucher">
+                        <div class="card-body">
+                        <h5 class="card-title">Nro operación: </h5>
+                        <p class="card-text">Banco: </p>
+                        <button class="btn btn-outline-primary" onclick="vervoucher('12345')">
+                        <i class="fa fa-eye" aria-hidden="true"></i> Detalles
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="quitarvoucher('123452')">
+                        <i class="fa fa-trash" aria-hidden="true"></i> Quitar
+                        </button>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>*@
+                        <!-- ------------------------------------------------------------------ -->
+                    </div>
+                </div>
+
+                @if (result == "NNN")
+                {
+
+                    @switch (cursoactual)
+                    {
+                        case "KSS01":
+                        case "KSS02":
+                        case "KSS03":
+                        case "KSS04":
+                        case "KSS05":
+                        case "KSS06":
+                        case "PKN01S":
+                        case "PKN02S":
+                        case "PKN03S":
+                        case "PKN04S":
+                        case "PKN05S":
+                        case "PKN06S":
+                        case "KN0AS":
+                        case "KN0BS":
+                        case "KN0CS":
+                        case "KN0DS":
+                            <div class="anotacion">El libro digital lo encontrará disponible en su intranet.</div>
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                <div class="custom-control custom-checkbox">
+                    <input onclick="chequeado()" type="checkbox" class="custom-control-input" id="customCheck1" checked>
+                    <label class="custom-control-label" for="customCheck1">Acepte nuestras <a class="acuerdomodal" data-toggle="modal" data-target="#modalacuerdo">condiciones del servicio </a> </label>
+                </div>
+
+            </div>
+
+
+
+
+            @if (result == "NNN")
+            {
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="botones btn btn-outline-primary" onclick="retroceder()">
+                                <i class="fa fa-arrow-left"></i> Volver
+                            </button>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="botones btn btn-outline-primary" onclick="registrarninios()">
+                                Registrar <i class="fa fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="botones btn btn-outline-primary" onclick="retroceder()">
+                                <i class="fa fa-arrow-left"></i> Volver
+                            </button>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <button type="button" class="botones btn btn-outline-primary" onclick="validarDatos()">
+                                Registrar <i class="fa fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Agregar Concepto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Concepto:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12 col-12">
+                        <select class="form-control" id="varconcepto" onchange="validaconcepto()">
+                            <option value="0" selected disabled>Seleccione una opción</option>
+                            @foreach (var item in conceptos)
+                            {
+                                <option value="@item.IdConcepto">@item.DesConcepto</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                    Cerrar <i class="fa fa-window-close" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="btn btn-outline-primary" onclick="agregar()">
+                    Agregar <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal contrato de acuerdo -->
+<div class="modal fade" id="modalacuerdo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title titlemodal" id="exampleModalLongTitle">Condiciones del Servicio</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="textocondiciones">
+                            Estimado alumno, es importante que comprenda las condiciones de las Clases Virtuales, ya que al continuar con este proceso, usted estará aceptando lo siguiente:
+                        </p>
+                        <ul>
+                            <li>
+                                Acepto llevar las clases del mes de Diciembre de manera virtual.
+                            </li>
+                            <li>
+                                Tener una conección mínima de 1.2 Mbps para mantener las clases de manera fluida.
+                            </li>
+                            <li>
+                                Acepto llevar las clases siguiendo la misma estructura curricular con las variaciones que el sistema virtual lo requieran.
+                            </li>
+                            <li>
+                                Para el correcto dictado de clases, cuento con una conexión estable a Internet y un Teléfono celular, Tablet, Laptop o Computador de escritorio que me permita interactuar de manera virtual (altavoz, micrófono y/o cámara) con mi profesor.
+                                <p style="font-size:0.8em !important;">*La cámara y micrófono serán necesarios para la entrevista final integrada en los ciclos de básico, intermedio, y los avanzados del 4 al 9.</p>
+                            </li>
+                            <li>
+                                Acepto llevar mi clase virtual con el libro respectivo en formato digital.
+                            </li>
+                            <li>
+                                Puede ver nuestra guía en el siguiente enlace: <a href="http://www.icpnarc.edu.pe/Guia/ZoomJovenesAdultos">aquí</a>
+                            </li>
+                            <li>
+                                Su libro electrónico lo encontrará disponible en su intranet.
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                    Cerrar <i class="fa fa-window-close" aria-hidden="true"></i>
+                </button>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal voucher -->
+<div class="modal fade" id="modalVoucher" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Agregue un Voucher</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group row">
+                            <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Banco:</label>
+                            <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                                <select class="form-control" id="varbanco">
+                                    <option value="0" selected disabled>Seleccione una opción</option>
+                                    <option value="BCP">BCP</option>
+                                    <option value="INTERBANK">Interbank</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Número de Operación:</label>
+                            <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                                <input type="number" class="form-control" id="numerooperacion" placeholder="Escriba el numero de Operación" maxlength="10" onkeypress="return validaNumericosoperacion(event)">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Fecha de la Operación:</label>
+                            <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                                <input id="datepicker" disabled />
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Foto del Voucher:</label>
+                            <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                                <input type="file" name="file" id="file" class="input-file">
+                                <label for="file" class="btn btn-tertiary js-labelFile" id="labelbutton">
+                                    <div id="spinner" class="spinner spinner-border spinner-border-sm text-success" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    <i id="icono-check" class="icon fa fa-check"></i>
+                                    <span class="js-fileName">Seleccione una imagen</span>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                    Cerrar <i class="fa fa-window-close" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="btn btn-outline-primary" onclick="agregarvoucher()">
+                    Agregar <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal detalle voucher -->
+<div class="modal fade" id="modaldetallevoucher" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title titlemodal" id="exampleModalLongTitle">Detalle de Voucher </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div id="vervoucherdetalle">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                    Cerrar <i class="fa fa-window-close" aria-hidden="true"></i>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/js/gijgo.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gijgo@1.9.6/js/messages/messages.es-es.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-storage.js"></script>
+
+    <script>
+        function _cabecera() {
+            return "@Url.Content("~")"; // Handle slashes, nulls, etc...
+        };
+    </script>
+
+    <script src="~/js/compressor.js"></script>
+
+
+
+    <script src="~/js/voucherPagos10.js"></script>
+
+}

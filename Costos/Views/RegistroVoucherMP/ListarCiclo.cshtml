@@ -1,0 +1,204 @@
+﻿@{
+    ViewData["Title"] = "ListarCiclo";
+    @model List<CEntidades.EN_PHoraria>;
+
+    CEntidades.EN_Curso detalle_Curso = new CEntidades.EN_Curso();
+    detalle_Curso = ViewBag.detalles;
+
+    var sessionName = new Byte[20];
+    bool estado = Context.Session.TryGetValue("tipoAlumno", out sessionName);
+
+
+    var codCursosiguiente = new Byte[20];
+    bool estado2 = Context.Session.TryGetValue("codCursoglobal", out codCursosiguiente);
+
+    var estadoninios = new Byte[20];
+    bool estado3 = Context.Session.TryGetValue("estadoNinios", out estadoninios);
+
+    string result2 = "";
+    if (estado2)
+    {
+        result2 = System.Text.Encoding.UTF8.GetString(codCursosiguiente);
+
+    }
+
+    string result3 = "";
+    if (estado3)
+    {
+        result3 = System.Text.Encoding.UTF8.GetString(estadoninios);
+
+    }
+
+}
+
+@section Styles{
+
+
+    <link href="~/css/vouchersmain.css" rel="stylesheet" />
+}
+
+
+<div class="card col-10 alumno opciones-alumno">
+    <div class="card-body card-alumno">
+
+        <div class="row">
+            <div class="col-12 title-horarios">
+                <h3 class="titulo">Registro de Pagos Abril - Paso 1 de 2 </h3>
+            </div>
+
+            <div class="col-12">
+                <div class="card card-title">
+                    <div class="card-body">
+                        <h3 class="title-curso-sugerido">Nivel sugerido =>@detalle_Curso.CodNivel : @detalle_Curso.CondNivelCurso </h3>
+                        <h5 class="title-curso-sugerido">
+                            <div class="left">
+                                Curso sugerido => @detalle_Curso.DesCurso
+                            </div>
+                            <div class="middle">
+                            </div>
+                            <div class="rigth">
+                                :
+                            </div>
+                        </h5>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <br />
+                <div class="form-group row">
+                    <label for="inputText" class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-form-label">Agregar ciclos:</label>
+                    <div class="col-xl-8 col-lg-8 col-md-7 col-sm-12">
+                        <button type="button" class="botones btn btn-outline-primary grande" data-toggle="modal" data-target="#exampleModalCenter">
+                            <i class="fa fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div id="tablemontos">
+                        <div class="table-responsive">
+                            <table class="table" id="mtable">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Curso</th>
+                                        <th scope="col">Horario</th>
+                                        <th scope="col">Docente</th>
+                                        <th scope="col">Quitar</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-12 btnbuscar">
+                        <button type="button" class="btn btn-outline-success grande" onclick="siguientepagina()">
+                            Siguiente <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Agregar Ciclo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-md-12 col-sm-12 col-12">
+                        <label for="exampleFormControlSelect1" class="seleccionadores"><div class="numeracion">1</div>Seleccione la Sede</label>
+                        <select class="form-control" id="ddlsedes2">
+                            <option value="0" disabled selected>Seleccione una opción</option>
+                            @foreach (var item in Model)
+                            {
+                                <option value="@item.idsede">@item.sede</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col col-md-12 col-sm-12 col-12">
+                        <label for="exampleFormControlSelect1" class="seleccionadores"><div class="numeracion">2</div> Seleccione el Nivel</label>
+                        <select class="form-control" id="ddlniveles2">
+                            <option value="0" disabled selected>Seleccione una opción</option>
+                        </select>
+                    </div>
+                    <div class="col col-md-12 col-sm-12 col-12">
+                        <label for="exampleFormControlSelect1" class="seleccionadores"><div class="numeracion">3</div> Seleccione la Frecuencia</label>
+                        <select class="form-control" id="ddlfrecuencia2">
+                            <option value="0" disabled selected>Seleccione una opción</option>
+                        </select>
+                    </div>
+                    <div class="col col-md-12 col-sm-12 col-12">
+                        <label for="exampleFormControlSelect1" class="seleccionadores"><div class="numeracion">4</div> Seleccione el Curso</label>
+                        <select class="form-control" id="ddlcursos2">
+                            <option value="0" disabled selected>Seleccione una opción</option>
+                        </select>
+                    </div>
+                    <div class="col-12 btnbuscar">
+                        <button type="button" class="btn btn-outline-primary grande" onclick="obtenerfrecuencias2()">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                            Buscar
+                        </button>
+                    </div>
+
+                    <div class="col-12 datos">
+
+                        <div id="tablaalumnos">
+                            <div class="loading" id="loading">
+                                <div class="spinner-grow text-primary"></div>
+                                <div class="spinner-grow text-secondary"></div>
+                                <div class="spinner-grow text-danger"></div>
+                                <div class="spinner-grow text-warning"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                    Cerrar <i class="fa fa-window-close" aria-hidden="true"></i>
+                </button>
+
+                <button type="button" class="btn btn-outline-primary" onclick="agregarciclo()">
+                    Agregar <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script>
+        function _obtenerurl() {
+            var url = "@Url.Action("ListarFrecuenciaAccionCiclo", "RegistroVoucherMP")";
+            return url;
+        }
+
+    </script>
+    <script>
+        function _cabecera() {
+            return "@Url.Content("~")";
+        };
+    </script>
+    <script src="~/js/Horarios5.js"></script>
+
+}

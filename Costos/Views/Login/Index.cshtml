@@ -1,0 +1,342 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.8.0/sweetalert2.min.css" rel="stylesheet" />
+    
+
+    <link href="~/css/Login4.css" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@700&family=Figtree:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        #barra-informativa {
+            display: none;
+            position: fixed;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            width: 100%;
+            height: auto;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            z-index: 99999;
+            padding: 6px;
+        }
+
+        .inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            padding-left: 5px;
+            font-size: 0.95em;
+            top: 30%;
+        }
+
+        .inner a.info {
+            padding-left: 5px;
+            text-decoration: underline !important;
+            color: #fff;
+            font-size: 0.90em;
+            font-weight: bold;
+        }
+
+        .inner a.ok {
+            padding: 5px;
+            margin: 0px;
+            min-width: 0px;
+            color: #ffffff;
+            text-decoration: none;
+            padding-left: 7px;
+            padding-right: 7px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            text-transform: none;
+            font-size: 0.90em !important;
+        }
+    </style>  
+
+</head>
+<body>
+    @* <div class="container cuadrologin">
+        <div class="row contenedor1">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                <div class="textos">
+                    <h4 class="alumno-nuevo">
+                        Si eres alumno nuevo, regístrate aquí.
+                    </h4>
+                    <input type="button" class="btn btn-outline-light btn-registrarse" value="Regístrate aquí" onclick="redireccionar()">
+                </div>
+            </div>
+            <div class="cuadro-principal col-xl-8 col-lg-8 col-md-8 col-sm-10 col-10">
+                <div class="cuadro col-xl-7 col-lg-7 col-md-8 col-sm-12 col-12">
+
+                    <div class="mitad-arriba">
+                        <div class="logo-icpna col-6">
+                            <img src="~/images/logo-actualizado.png" class="img-fluid" alt="Responsive image" />
+                        </div>
+                        <div class="logo-inferior col-8">
+                            <img src="~/images/login.png" class="img-fluid" alt="Responsive image" />
+                        </div>
+
+                        <div class="texto-logo-inferior">
+                            <p style="font-size:1.5em">Matrículas ICPNA</p>
+                        </div>
+                    </div>
+                    <div class="mitad-abajo">
+
+                        <form class="formulario">
+                            <h3 class="title">Datos del Alumno</h3>
+                            <div class="form-group row">
+                                <i class="icono fa fa-user col-2"></i>
+                                <div class="inputs col-10">
+                                    <input type="text" class="form-control" id="inputusuario" placeholder="Codigo o DNI" onblur="validar(this)" required autofocus>
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                <i class="icono fa fa-key col-2"></i>
+                                <div class="inputs col-10">
+                                    <input type="password" class="form-control" id="inputPassword" placeholder="XYZ123" onblur="validar(this)" required>
+                                </div>
+
+                            </div>
+                            <button type="button" class="boton btn btn-outline-light" id="boton" onclick="loguearse()">Ingresar</button>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div> *@
+
+    <div class="container">
+        <div class="pic2"></div>
+        <img src="~/images/logo-blanco.png" alt="">
+        <h1>Registro de Matrícula</h1>
+        <div class="inp">
+            <input type="text" id="inputusuario">
+            <label onclick="focusinp('usr')" for="Username">Usuario</label>
+        </div>
+        <div class="inp">
+            <input type="password" id="inputPassword">
+            <label onclick="focusinp('pass')" for="Password">password</label>
+        </div>
+       
+        <button type="submit" id="boton" onclick="loguearse()" class="button">Ingresar</button>
+        <a href="https://alumno.icpnarc.edu.pe/register">No tienes usuario? Registrate acá</a>
+    </div>
+    <div class="pic">
+    </div>
+ 
+
+
+
+    <div class="modal fade bd-example-modal-lg" id="myModalSecond" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="col-6">
+                        <img src="~/images/logo-actualizado.png" class="img-fluid" alt="Responsive image" />
+                    </div>
+                    
+                    @*<h5 class="modal-title titlemodal" id="exampleModalLongTitle">Comunicado Importante </h5>*@
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <h3 style="font-weight:bold; text-align:center;">
+                        COMUNICADO
+                    </h3>
+                    <br />
+                    <p style="padding-left: 2rem;padding-right:2rem;">
+                        Estimados clientes:
+                    </p>
+                    <p style="text-align:justify; padding-left: 2rem;padding-right:2rem;">
+                        Se comunica que a partir del mes de Abril del 2023, los vouchers con manchas, borrosos o incompletos no serán procesados por el área de caja para su matrícula.
+                    </p>
+                    <p style="text-align:justify; padding-left: 2rem;padding-right:2rem;">
+                        Por tanto se le solicita cuidar su voucher de pago para procesar correctamente su matrícula y posterior verificación si en caso lo amerita.
+                    </p>
+                    <p style="text-align:justify; padding-left: 2rem;padding-right:2rem;">
+                        La ACPNA RC no se responsabiliza por la pérdida y/o deterioro del voucher.
+                    </p>
+
+                    <p style="text-align:justify; padding-left: 2rem;padding-right:2rem;">
+                        Asimismo les comunicamos que los pagos por pensiones serán procesados dentro de las 24 horas de realizado su registro por nuestra plataforma (no se considera sábados por la tarde, domingos ni feriados).
+                    </p>
+                    <p style="text-align:justify; padding-left: 2rem;padding-right:2rem;">
+                        Para evitar cualquier inconveniente realice su proceso con anticipación.
+                    </p>
+
+                    <p style="text-align:right; padding-left: 2rem;padding-right:2rem;">
+                        La Gerencia
+                    </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    @*
+        <button type="button" class="btn btn-primary">Save changes</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="barra-informativa">
+        <div class="inner">
+            <div>
+                Utilizamos cookies propias y de terceros para mejorar
+                nuestros servicios y ofrecerle una mejor experiencia de navegación.
+                Si continúa navegando consideramos que acepta su uso.
+                <a href="/politica-de-cookies" class="info" target="_blank">
+                    <b>Más&nbsp;información</b>
+                </a>&nbsp;
+                <a href="javascript:void(0);" class="label label-info ok" onclick="PutCookie();">
+                    <b>Acepto</b>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+ 
+
+    <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.8.0/sweetalert2.min.js"></script>
+
+    <script>
+        function _cabecera() {
+            return "@Url.Content("~")"; // Handle slashes, nulls, etc...
+        };
+
+        function mostrarEncuesta(){
+            window.open('https://forms.gle/gTHaDgPoAKoGE1z1A', '_blank');
+        
+        }
+
+    </script>
+
+    <script src="~/js/login14.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#myModalSecond').modal('toggle')
+        });
+    </script>
+
+
+    <script>
+        window.fwSettings = {
+            'widget_id': 151000001939
+        };
+        !function () { if ("function" != typeof window.FreshworksWidget) { var n = function () { n.q.push(arguments) }; n.q = [], window.FreshworksWidget = n } }()
+    </script>
+    <script type='text/javascript' src='https://widget.freshworks.com/widgets/151000001939.js' async defer>
+    </script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const inputs = document.querySelectorAll(".inp input");
+
+            inputs.forEach(input => {
+                input.addEventListener("input", function () {
+                    const label = this.nextElementSibling;
+                    label.classList.toggle("up", this.value.trim() !== "");
+                });
+            });
+        });
+
+        function focusinp(inp) {
+            if (inp == 'usr') {
+                document.getElementById("username").focus();
+            } else if (inp == 'pass') {
+                document.getElementById("password").focus();
+            } else {
+                document.getElementById("username").focus();
+            }
+        }
+
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            if (getCookie('RegistraPagos.Sesion') != "1") {
+                document.getElementById("barra-informativa").style.display = "block";
+            }
+            else {
+                document.getElementById("barra-informativa").style.display = "none";
+            }
+        });
+    </script>
+
+    <script>
+        function getCookie(c_name) {
+            var c_value = document.cookie;
+            var c_start = c_value.indexOf(" " + c_name + "=");
+            if (c_start == -1) {
+                c_start = c_value.indexOf(c_name + "=");
+            }
+            if (c_start == -1) {
+                c_value = null;
+            } else {
+                c_start = c_value.indexOf("=", c_start) + 1;
+                var c_end = c_value.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = c_value.length;
+                }
+                c_value = unescape(c_value.substring(c_start, c_end));
+            }
+            return c_value;
+        }
+
+        function setCookie(c_name, value, exdays) {
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + exdays);
+            var c_value = escape(value) + ((exdays == null) ?
+                "" : "; expires=" + exdate.toUTCString());
+            document.cookie = c_name + "=" + c_value;
+        }
+
+        if (getCookie('RegistraPagos.Sesion') != "1") {
+            document.getElementById("barra-informativa").style.display = "block";
+        }
+
+        function PutCookie() {
+            setCookie('RegistraPagos.Sesion', '1', 365);
+            document.getElementById("barra-informativa").style.display = "none";
+        }
+    </script>
+   
+</body>
+</html>
+
+
+
+

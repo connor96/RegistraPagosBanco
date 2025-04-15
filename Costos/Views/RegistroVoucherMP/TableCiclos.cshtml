@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+    List<CEntidades.EN_Curso> cursos = new List<CEntidades.EN_Curso>();
+    cursos = ViewBag.ccargados;
+
+    int contador = 0;
+}
+
+<div class="table-responsive">
+    <table class="table" id="mtable">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Horario</th>
+                <th scope="col">Docente</th>
+                <th scope="col">Quitar</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in cursos)
+            {
+                contador = contador + 1;
+                <tr>
+                    <th scope="row">@contador</th>
+                    <td>@item.DesCurso</td>
+                    <td>@item.Horario</td>
+                    <td>@item.Docente</td>
+                    <td class="icono"> <a onclick="quitarciclo(@item.IdCiclo)" class="mouse"> <i class="fa fa-trash" aria-hidden="true"></i></a> </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+
+<br />
